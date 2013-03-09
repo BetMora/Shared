@@ -6,6 +6,7 @@ Features:
 * Binary file I/O
 * Directory handling(not completely implemented yet)
 * Some string utilities
+
 Planned features:
 ------
 * Buffer implementation
@@ -13,6 +14,7 @@ Planned features:
 * Logging
 * Data compression
 * Basic networking using CURL
+
 Current TODO list
 ------
 * Make CMake script determine what OS it is ran on and create Configure.h file based on this. 
