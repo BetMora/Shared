@@ -3,10 +3,12 @@ Shared
 Little shared\utility library mostly features a functions to handle binary files.
 ======
 Features:
+======
 * Binary file I/O
 * Directory handling(not completely implemented yet)
 * Some string utilities
 Planned features:
+======
 * Buffer implementation
 * High resolution timer
 * Logging
