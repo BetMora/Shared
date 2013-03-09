@@ -60,6 +60,7 @@ char* Stream::ReadString(bool NullTerminated)
 	uint32 Length = ReadUINT32();
 
 	char* Buffer = new char[Length];
+	//memset(Buffer, 0, sizeof(Buffer) * Length);
 	memset(Buffer, 0, sizeof(Buffer));
 
 	Read(Buffer, Length);
@@ -87,6 +88,7 @@ char* Stream::ReadRawData(size_t Size)
 	int			Count	= 0;
 
 	char*		Buffer	= new char[Size];
+	//memset(Buffer, 0, sizeof(Buffer) * Size);
 	memset(Buffer, 0, sizeof(Buffer));
 
 	while(Count != Size)
