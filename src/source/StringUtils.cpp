@@ -14,35 +14,22 @@ char* Strdup(const char* Str)
 	return Dest;
 }
 
-char* ConvertSlash(const char* Str)
+char* Strndup(const char* Str, size_t MaxCount)
 {
-	char*	Buffer	= Strdup(Str);
-	char*	Ptr		= Strdup(Str);
-	int		Count	= 0;
+	char* Dest;
+	size_t StrLen = strlen(Str);
 
-	while(*Ptr != '\0')
-	{
-		switch(*Ptr)
-		{
-		case '/':
-			Buffer[Count] = '\\';
-			break;
-		case '\\':
-			Buffer[Count] = '/';
-			break;
-		default:
-			break;
-		}
+	if(StrLen < MaxCount)
+		return Strdup(Str);
 
-		// takes first element of the char array and increments it to next
-		*Ptr++;
-		Count++;
-	}
+	if(!Str || MaxCount < 0 || !(Dest = new char[MaxCount + 1]))
+		return 0;
 
-	Ptr = 0;
-	delete Ptr;
+	memcpy(Dest, Src, MaxCount);
 
-	return Buffer;
+	Dest[MaxCount] = 0;
+
+	return Dest;
 }
 
 void ConvertSlash(const char* Src, char* Dst)
@@ -67,4 +54,87 @@ void ConvertSlash(const char* Src, char* Dst)
 		*Src++;
 		Count++;
 	}
+}
+
+int TokenCount(const char* Path)
+{
+	int		Result	= 0;
+	bool	HadChar = false;
+
+	while(*Path != '\0')
+	{
+		switch(*Path)
+		{
+		case 0:
+		case '/':
+		case '\\':
+			if(!HadChar)
+				break;
+
+			Result++;
+
+			HadChar = false;
+			break;
+		default:
+			HadChar = true;
+			break;
+		}
+
+		Path++;
+	}
+
+}
+
+char* PathToken(const char* Path, int* Length, int Token)
+{
+	size_t	Len	= 0;
+	int		Count	= 0;
+	bool Char = false, Slash = false;
+
+	const char* Ptr;
+	Ptr = Path;
+
+	while(*Path != '\0')
+	{
+		switch(*Path)
+		{
+		case 0:
+		case '/':
+		case '\\':
+			Slash = true;
+
+			if(!Char)
+				break;
+
+			if(Count++ == Token)
+			{
+				while(Len && (Ptr[Len - 1] == ' '))
+					Len--;
+
+				if(Length)
+					*Length = Len;
+
+				return (char*)Ptr;
+			}
+
+			Char = false;
+			break;
+		default:
+			Char = true;
+			Len++;
+
+			if(!Slash)
+				break;
+
+			Slash = false;
+
+			Ptr = Path;
+
+			Len = 1;
+		}
+
+		*Path++;
+	}
+
+	return 0;
 }
