@@ -9,12 +9,14 @@ include_directories(${INCLUDE_DIR})
 include_directories(external)
 
 set(SOURCE_SHARED ${SOURCE_DIR}/Directory.cpp
+				  ${SOURCE_DIR}/FileSystem.cpp
 				  ${SOURCE_DIR}/File.cpp
 				  ${SOURCE_DIR}/Stream.cpp
 				  ${SOURCE_DIR}/StringUtils.cpp)
 set(HEADER_SHARED ${INCLUDE_DIR}/Config.h
 				  ${INCLUDE_DIR}/Defines.h
 				  ${INCLUDE_DIR}/Directory.h
+				  ${INCLUDE_DIR}/FileSystem.h
 				  ${INCLUDE_DIR}/File.h
 				  ${INCLUDE_DIR}/Shared.h
 				  ${INCLUDE_DIR}/Stream.h
