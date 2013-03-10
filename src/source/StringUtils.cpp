@@ -25,7 +25,7 @@ char* Strndup(const char* Str, size_t MaxCount)
 	if(!Str || MaxCount < 0 || !(Dest = new char[MaxCount + 1]))
 		return 0;
 
-	memcpy(Dest, Src, MaxCount);
+	memcpy(Dest, Str, MaxCount);
 
 	Dest[MaxCount] = 0;
 
@@ -83,6 +83,7 @@ int TokenCount(const char* Path)
 		Path++;
 	}
 
+	return Result;
 }
 
 char* PathToken(const char* Path, int* Length, int Token)

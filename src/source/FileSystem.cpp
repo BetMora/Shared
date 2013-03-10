@@ -5,6 +5,7 @@
 #include <direct.h>
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 
 void FileSystem::RemoveFile(const char* Name)
 {
@@ -13,12 +14,12 @@ void FileSystem::RemoveFile(const char* Name)
 
 void FileSystem::CopyFile(const char* SrcPath, const char* DstPath)
 {
-	copy(SrcPath, DstPath);
+	//copy(SrcPath, DstPath);
 }
 
 void FileSystem::MoveFile(const char* SrcPath, const char* DstPath)
 {
-	move(SrcPath, DstPath);
+	//move(SrcPath, DstPath);
 }
 
 void FileSystem::RenameFile(const char* SrcName, const char* DstName)
@@ -31,9 +32,9 @@ char* FileSystem::HomeDirectory()
 	static char Buffer[1024];
 
 #ifdef WINDOWS
-	Buffer = getenv("USERPROFILE");
+	strcpy(Buffer, getenv("USERPROFILE"));
 #else
-	Buffer = getenv("HOME");
+	strcpy(Buffer, getenv("HOME"));
 #endif
 
 	Buffer[sizeof(Buffer) - 1] = '\0';
