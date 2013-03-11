@@ -1,5 +1,6 @@
 #pragma once
 
+// note: deletes passed string
 char* Strdup(const char* Str);
 char* Strdnup(const char* Str, size_t MaxCount);
 

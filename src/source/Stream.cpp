@@ -1,6 +1,7 @@
 #include "Stream.h"
 #include "Config.h"
 #include "Defines.h"
+#include "StringUtils.h"
 
 #include <cstring>
 #include <cstdarg>
@@ -54,7 +55,7 @@ char* Stream::ReadString(bool NullTerminated)
 			Count++;
 		}
 
-		return Buffer;
+		return Strdup(Buffer);
 	}
 
 	uint32 Length = ReadUINT32();
@@ -82,7 +83,7 @@ char* Stream::ReadString(size_t Size)
 	return Buffer;
 }
 
-char* Stream::ReadRawData(size_t Size)
+char* Stream::ReadRaw(size_t Size)
 {
 	char		Tmp		= 0;
 	int			Count	= 0;
@@ -98,15 +99,14 @@ char* Stream::ReadRawData(size_t Size)
 	 	if(Tmp != '\0')
 	 		Buffer[Count] = Tmp;
 		else
-			Buffer[Count] = 0xA0;
-			//Buffer[Count] = 0xFF;
+			break;
 	 
 	 	Count++;
 	}
 	 
 	Buffer[Count - 1] = '\0';
 	 
-	return Buffer;
+	return Strdup(Buffer);
 }
 
 #ifdef BIG_ENDIAN
@@ -114,11 +114,9 @@ char* Stream::ReadRawData(size_t Size)
 #undef BIG_ENDIAN
 
 IMPLEMENT_WRITE(sint8, WriteSINT8)
-IMPLEMENT_WRITE(sint8*, WriteSINT8)
 IMPLEMENT_READ(sint8, ReadSINT8)
 
 IMPLEMENT_WRITE(uint8, WriteUINT8)
-IMPLEMENT_WRITE(uint8*, WriteUINT8)
 IMPLEMENT_READ(uint8, ReadUINT8)
 
 #define BIG_ENDIAN
@@ -126,43 +124,33 @@ IMPLEMENT_READ(uint8, ReadUINT8)
 #else
 
 IMPLEMENT_WRITE(sint8, WriteSINT8)
-IMPLEMENT_WRITE_ARRAY(sint8*, WriteSINT8)
 IMPLEMENT_READ(sint8, ReadSINT8)
 
 IMPLEMENT_WRITE(uint8, WriteUINT8)
-IMPLEMENT_WRITE_ARRAY(uint8*, WriteUINT8)
 IMPLEMENT_READ(uint8, ReadUINT8)
 
 #endif
 	
 IMPLEMENT_WRITE(sint16, WriteSINT16)
-IMPLEMENT_WRITE_ARRAY(sint16*, WriteSINT16)
 IMPLEMENT_READ(sint16, ReadSINT16)
 
 IMPLEMENT_WRITE(uint16, WriteUINT16)
-IMPLEMENT_WRITE_ARRAY(uint16*, WriteUINT16)
 IMPLEMENT_READ(uint16, ReadUINT16)
 
 IMPLEMENT_WRITE(sint32, WriteSINT32)
-IMPLEMENT_WRITE_ARRAY(sint32*, WriteSINT32)
 IMPLEMENT_READ(sint32, ReadSINT32)
 
 IMPLEMENT_WRITE(uint32, WriteUINT32)
-IMPLEMENT_WRITE_ARRAY(uint32*, WriteUINT32)
 IMPLEMENT_READ(uint32, ReadUINT32)
 
 IMPLEMENT_WRITE(sint64, WriteSINT64)
-IMPLEMENT_WRITE_ARRAY(sint64*, WriteSINT64)
 IMPLEMENT_READ(sint64, ReadSINT64)
 
 IMPLEMENT_WRITE(uint64, WriteUINT64)
-IMPLEMENT_WRITE_ARRAY(uint64*, WriteUINT64)
 IMPLEMENT_READ(uint64, ReadUINT64)
 
 IMPLEMENT_WRITE(f32, WriteF32)
-IMPLEMENT_WRITE_ARRAY(f32*, WriteF32)
 IMPLEMENT_READ(f32, ReadF32)
 
 IMPLEMENT_WRITE(f64, WriteF64)
-IMPLEMENT_WRITE_ARRAY(f64*, WriteF64)
 IMPLEMENT_READ(f64, ReadF64)

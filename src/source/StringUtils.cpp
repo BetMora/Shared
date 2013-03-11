@@ -11,6 +11,8 @@ char* Strdup(const char* Str)
 
 	strcpy(Dest, Str);
 
+	delete Str;
+
 	return Dest;
 }
 
@@ -28,6 +30,8 @@ char* Strndup(const char* Str, size_t MaxCount)
 	memcpy(Dest, Str, MaxCount);
 
 	Dest[MaxCount] = 0;
+
+	delete Str;
 
 	return Dest;
 }

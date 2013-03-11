@@ -15,9 +15,10 @@ public:
 };
 
 // todo
-// create directory tree from path string
-// \Root\Sub1\Sub2
-// Will result creating tree like this:
-// Root
-// Root\Sub1
-// Root\Sub1\Sub2
+// 1.	create directory tree from path string
+//		\Root\Sub1\Sub2
+//		Will result creating tree like this:
+//		Root
+//		Root\Sub1
+//		Root\Sub1\Sub2
+// 2.	add file/directory existense functions

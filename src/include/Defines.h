@@ -48,7 +48,7 @@ Type Rtn, Buf = 0; \
 	{ \
 	*d-- = *s++; \
 	} \
-	Write(&Buf, sizeof(Value) * Size); \
+	Write(&Buf, Size); \
 } 
 
 #else
@@ -70,7 +70,7 @@ Type Rtn, Buf = 0; \
 #define IMPLEMENT_WRITE_ARRAY(Type, Name) \
 	void Stream::Name(Type Value, size_t Size) \
 { \
-	Write(&Value, sizeof(Value) * Size); \
+	Write(&Value, Size); \
 }
 
 #endif

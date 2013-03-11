@@ -1,6 +1,7 @@
 #include "FileSystem.h"
 #include "Config.h"
 #include "StringUtils.h"
+#include "File.h"
 
 #include <direct.h>
 #include <cstdio>
@@ -14,12 +15,29 @@ void FileSystem::RemoveFile(const char* Name)
 
 void FileSystem::CopyFile(const char* SrcPath, const char* DstPath)
 {
-	//copy(SrcPath, DstPath);
+	File Input,
+		 Output;
+
+	Input.Open(SrcPath);
+	Output.Open(DstPath);
+
+	size_t Size = Input.Size();
+
+	char* Buffer = new char[Size];
+
+	Buffer = Input.ReadRaw(Size);
+
+	// Output.WriteRaw(Buffer);
+
+	Input.Close();
+	Output.Close();
 }
 
 void FileSystem::MoveFile(const char* SrcPath, const char* DstPath)
 {
-	//move(SrcPath, DstPath);
+	CopyFile(SrcPath, DstPath);
+
+	RemoveFile(SrcPath);
 }
 
 void FileSystem::RenameFile(const char* SrcName, const char* DstName)
@@ -44,14 +62,10 @@ char* FileSystem::HomeDirectory()
 
 void FileSystem::Mkdir(const char* Path)
 {
-//#ifdef WINDOWS
-	mkdir(Path);
-// #elif defined LINUX
-// 	mkdir(Path, 0755);
-// #endif
+	_mkdir(Path);
 }
 
 void FileSystem::Rmdir(const char* Path)
 {
-	rmdir(Path);
+	_rmdir(Path);
 }

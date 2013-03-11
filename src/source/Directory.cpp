@@ -16,19 +16,23 @@ struct DirectoryData
 {
 	bool							IsOpened;
 	size_t							FilesNum;
+	size_t							DirectoriesNum;
 
 	std::vector<std::string>		Files;
+	std::vector<std::string>		Directories;
 
 	DirectoryData()
 	{
 		IsOpened = false;
 		FilesNum = 0;
+		DirectoriesNum = 0;
 	}
 
 	~DirectoryData()
 	{
 		IsOpened = false;
 		FilesNum = 0;
+		DirectoriesNum = 0;
 	}
 };
 
@@ -97,7 +101,9 @@ void Directory::Open(const char* Name)
 				mData->Files.push_back(AppendEntry(Name, DirEntry->d_name));
 				mData->FilesNum++;
 				break;
-			case DT_DIR:				
+			case DT_DIR:
+				mData->Directories.push_back(AppendEntry(Name, DirEntry->d_name));
+				mData->DirectoriesNum++;
 				Open(AppendEntry(Name, DirEntry->d_name));
 				break;
 			default:
@@ -120,12 +126,33 @@ bool Directory::IsOpened()
 	return mData->IsOpened;
 }
 
+size_t  Directory::FilesNum()
+{
+	return mData->FilesNum;
+}
+size_t  Directory::DirectoriesNum()
+{
+	return mData->DirectoriesNum;
+}
+
 char* Directory::FindFile(const char* Name)
 {
-	for(size_t i = 0; i < mData->FilesNum; i++)
-		// if any of stored files contains Name in the path
-		if(mData->Files[i].find(Name) != std::string::npos)
-			return (char*)mData->Files[i].c_str();
+	if(mData->FilesNum != 0)
+		for(size_t i = 0; i < mData->FilesNum; i++)
+			// if any of stored files contains Name in the path
+			if(mData->Files[i].find(Name) != std::string::npos)
+				return (char*)mData->Files[i].c_str();
+
+	return "";
+}
+
+char* Directory::FindDirectory(const char* Name)
+{
+	if(mData->DirectoriesNum != 0)
+		for(size_t i = 0; i < mData->DirectoriesNum; i++)
+			// if any of stored files contains Name in the path
+			if(mData->Directories[i].find(Name) != std::string::npos)
+				return (char*)mData->Directories[i].c_str();
 
 	return "";
 }

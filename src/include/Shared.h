@@ -7,4 +7,5 @@
 #include "Stream.h"
 #include "File.h"
 #include "Directory.h"
+#include "FileSystem.h"
 #include "StringUtils.h"
