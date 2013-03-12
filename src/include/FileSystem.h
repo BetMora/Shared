@@ -3,15 +3,15 @@
 class FileSystem
 {
 public:
-	void RemoveFile(const char* Name);
-	void CopyFile(const char* SrcPath, const char* DstPath);
-	void MoveFile(const char* SrcPath, const char* DstPath);
-	void RenameFile(const char* SrcName, const char* DstName);
+	void    RemoveFile(const char* Name);
+	void    CopyFile(const char* SrcPath, const char* DstPath);
+	void    MoveFile(const char* SrcPath, const char* DstPath);
+	void    RenameFile(const char* SrcName, const char* DstName);
 
-	char* HomeDirectory();
+	char*   HomeDirectory();
 
-	void Mkdir(const char* Path);
-	void Rmdir(const char* Path);
+	void    CreateDirectory(const char* Path);
+	void    RemoveDirectory(const char* Path);
 };
 
 // todo

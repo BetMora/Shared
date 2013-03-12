@@ -31,6 +31,8 @@ void FileSystem::CopyFile(const char* SrcPath, const char* DstPath)
 
 	Output.WriteRaw(Buffer, sizeof(*Buffer) * Size);
 
+    delete Buffer;
+
 	Input.Close();
 	Output.Close();
 }
@@ -62,12 +64,12 @@ char* FileSystem::HomeDirectory()
 	return Buffer;
 }
 
-void FileSystem::Mkdir(const char* Path)
+void FileSystem::CreateDirectory(const char* Path)
 {
 	_mkdir(Path);
 }
 
-void FileSystem::Rmdir(const char* Path)
+void FileSystem::RemoveDirectory(const char* Path)
 {
 	_rmdir(Path);
 }
