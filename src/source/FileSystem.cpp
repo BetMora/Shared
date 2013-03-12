@@ -7,6 +7,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <memory>
 
 void FileSystem::RemoveFile(const char* Name)
 {
@@ -24,10 +25,11 @@ void FileSystem::CopyFile(const char* SrcPath, const char* DstPath)
 	size_t Size = Input.Size();
 
 	char* Buffer = new char[Size];
+    memset(Buffer, 0, sizeof(*Buffer) * Size);
 
 	Buffer = Input.ReadRaw(Size);
 
-	// Output.WriteRaw(Buffer);
+	Output.WriteRaw(Buffer, sizeof(*Buffer) * Size);
 
 	Input.Close();
 	Output.Close();
@@ -50,9 +52,9 @@ char* FileSystem::HomeDirectory()
 	static char Buffer[1024];
 
 #ifdef WINDOWS
-	strcpy(Buffer, getenv("USERPROFILE"));
+ 	strcpy(Buffer, getenv("USERPROFILE"));
 #else
-	strcpy(Buffer, getenv("HOME"));
+ 	strcpy(Buffer, getenv("HOME"));
 #endif
 
 	Buffer[sizeof(Buffer) - 1] = '\0';
