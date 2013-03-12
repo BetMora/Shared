@@ -17,8 +17,6 @@ Planned features:
 
 Current TODO list
 ------
-* FileSystem::CopyFile currently does not work properly. 
-Call trace: FileSystem::CopyFile [OK] -> Stream::WriteRaw [OK] -> File::Write [Fails, data won't get passed into, Data buffer is empty, Size is ok]
 * File/direcotry existence check for FileSystem
 * Read/Write array for Stream
 * Make CMake script determine what OS it is ran on and create Configure.h file based on this. 
