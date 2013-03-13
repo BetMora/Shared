@@ -14,39 +14,47 @@
 
 struct DirectoryData
 {
-	bool							IsOpened;
-	size_t							FilesNum;
-	size_t							DirectoriesNum;
+	bool                            IsOpened;
+	size_t                          FilesNum;
+    size_t                          CachedFilesNum;
+	size_t                          DirectoriesNum;
+    size_t                          CachedDirectoriesNum;
 
-	std::vector<std::string>		Files;
-	std::vector<std::string>		Directories;
+	std::vector<std::string>        Files;
+    std::vector<std::string>        CachedFiles;
+	std::vector<std::string>        Directories;
+    std::vector<std::string>        CachedDirectories;
 
 	DirectoryData()
 	{
-		IsOpened = false;
-		FilesNum = 0;
-		DirectoriesNum = 0;
+		IsOpened                = false;
+		FilesNum                = 0;
+        CachedFilesNum          = 0;
+		DirectoriesNum          = 0;
+        CachedDirectoriesNum    = 0;
 	}
 
 	~DirectoryData()
 	{
-		IsOpened = false;
-		FilesNum = 0;
-		DirectoriesNum = 0;
+		IsOpened                = false;
+		FilesNum                = 0;
+        CachedFilesNum          = 0;
+		DirectoriesNum          = 0;
+        CachedDirectoriesNum    = 0;
 	}
 };
 
 char* AppendEntry(const char* RootPath, const char* DirEntry)
 {
-	size_t		NameSZ		= 0;
-	size_t		DirEntrySZ	= 0;
-	size_t		TmpSZ		= 0;
-	char*		Tmp			= 0;
+	size_t      NameSZ      = 0;
+	size_t      DirEntrySZ  = 0;
+	size_t      TmpSZ       = 0;
+	char*       Tmp         = 0;
 
-	NameSZ				= strlen(RootPath);
-	DirEntrySZ			= strlen(DirEntry);
+	NameSZ              = strlen(RootPath);
+	DirEntrySZ          = strlen(DirEntry);
 	// 2 characters to store separator and null terminating character
-	TmpSZ				= NameSZ + DirEntrySZ + 2;
+	TmpSZ               = NameSZ + DirEntrySZ + 2;
 
 	Tmp = new char[TmpSZ];
 	memset(Tmp, 0, TmpSZ);
@@ -85,11 +93,6 @@ void Directory::Open(const char* Name)
 		return;
 
 	mData->IsOpened = true;
-
-	int		NameSZ		= 0;
-	int		DirEntrySZ	= 0;
-	int		TmpSZ		= 0;
-	char*	Tmp			= 0;
 
 	while((DirEntry = readdir(Dir)) != 0)
 	{
@@ -137,22 +140,65 @@ size_t  Directory::DirectoriesNum()
 
 char* Directory::FindFile(const char* Name)
 {
-	if(mData->FilesNum != 0)
-		for(size_t i = 0; i < mData->FilesNum; i++)
-			// if any of stored files contains Name in the path
-			if(mData->Files[i].find(Name) != std::string::npos)
-				return (char*)mData->Files[i].c_str();
+    if(mData->IsOpened)
+    {
+	    if(mData->FilesNum != 0)
+		    for(size_t i = 0; i < mData->FilesNum; i++)
+			    // check if any of stored files matches the provided pattern
+			    if(mData->Files[i].find(Name) != std::string::npos)
+                { 
+                    if(mData->CachedFiles.size() != 0) // if we have cached files already
+                    {
+                        // for every cached file
+                        for(size_t n = 0; n < mData->CachedFilesNum; n++)
+                            // checking if we have not cached("found before") this file already
+                            if(mData->CachedFiles[n].find(mData->Files[i]) == std::string::npos)
+                            { // no, we didn't
+                                // so we cache this one and return it
+                                mData->CachedFiles.push_back(mData->Files[i]);
+                                mData->CachedFilesNum++;
+                                return (char*)mData->Files[i].c_str();
+                            }
+                    }
+                    else // we have no cached files yet
+                    {
+                        // so we cache this one and return it
+                        mData->CachedFiles.push_back(mData->Files[i]);
+                        mData->CachedFilesNum++;
+                        return (char*)mData->Files[i].c_str();
+                    }
+                }
+    }
 
-	return "";
+	return 0;
 }
 
 char* Directory::FindDirectory(const char* Name)
 {
-	if(mData->DirectoriesNum != 0)
-		for(size_t i = 0; i < mData->DirectoriesNum; i++)
-			// if any of stored files contains Name in the path
-			if(mData->Directories[i].find(Name) != std::string::npos)
-				return (char*)mData->Directories[i].c_str();
+    if(mData->IsOpened)
+    {
+        if(mData->DirectoriesNum != 0)
+            for(size_t i = 0; i < mData->DirectoriesNum; i++)
+                if(mData->Directories[i].find(Name) != std::string::npos)
+                {
+                    if(mData->CachedDirectories.size() != 0)
+                    {
+                        for(size_t n = 0; n < mData->CachedDirectoriesNum; n++)
+                            if(mData->CachedDirectories[n].find(mData->Directories[i]) == std::string::npos)
+                            {
+                                mData->CachedDirectories.push_back(mData->Directories[i]);
+                                mData->CachedDirectoriesNum++;
+                                return (char*)mData->Directories[i].c_str();
+                            }
+                    }
+                    else
+                    {
+                        mData->CachedDirectories.push_back(mData->Directories[i]);
+                        mData->CachedDirectoriesNum++;
+                        return (char*)mData->Directories[i].c_str();
+                    }
+                }
+    }
 
-	return "";
+	return 0;
 }

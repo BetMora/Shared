@@ -1,5 +1,5 @@
 #include "StringUtils.h"
-#include <iostream>
+
 #include <cstring>
 
 char* Strdup(const char* Str)
@@ -121,7 +121,7 @@ char* PathToken(const char* Path, int Token)
 
         int i = 0;
 
-        for(int n = Tokens[Token - 1]; n < Tokens[Token]; n++)
+        for(size_t n = Tokens[Token - 1]; n < Tokens[Token]; n++)
         {
             if(i != TokenLength)
                 Buffer[i] = Path[n];

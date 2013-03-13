@@ -14,6 +14,11 @@ void FileSystem::RemoveFile(const char* Name)
 	remove(Name);
 }
 
+void FileSystem::RenameFile(const char* SrcName, const char* DstName)
+{
+    rename(SrcName, DstName);
+}
+
 void FileSystem::CopyFile(const char* SrcPath, const char* DstPath)
 {
 	File Input,
@@ -42,11 +47,6 @@ void FileSystem::MoveFile(const char* SrcPath, const char* DstPath)
 	CopyFile(SrcPath, DstPath);
 
 	RemoveFile(SrcPath);
-}
-
-void FileSystem::RenameFile(const char* SrcName, const char* DstName)
-{
-	rename(SrcName, DstName);
 }
 
 char* FileSystem::HomeDirectory()
