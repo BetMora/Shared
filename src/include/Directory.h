@@ -16,7 +16,6 @@ public:
 	size_t  FilesNum();
 	size_t  DirectoriesNum();
 
-	// returns full path to specified file
 	char*	FindFile(const char* Name);
 	char*   FindDirectory(const char* Name);
 private:

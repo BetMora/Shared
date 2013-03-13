@@ -4,7 +4,6 @@
 #include "StringUtils.h"
 
 #include <cstring>
-#include <cstdarg>
 #include <cstdio>
 #include <memory>
 

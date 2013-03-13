@@ -23,7 +23,7 @@ void Stream::Name(Type Value) \
 #define IMPLEMENT_WRITE_ARRAY(Type, Name) \
 void Stream::Name(Type* Value, size_t Size) \
 { \
-    Write(&Value, Size); \
+    Write(Value, (sizeof(Type) * Size)); \
 }
 
 #define IMPLEMENT_READ(Type, Name) \
@@ -37,9 +37,9 @@ Type Stream::Name() \
 #define IMPLEMENT_READ_ARRAY(Type, Name) \
 Type* Stream::Name(size_t Size) \
 { \
-    Type* Rtn = 0; \
+    Type* Rtn = new Type[Size]; \
     memset(Rtn, 0, Size); \
-    Read(&Rtn, Size); \
+    Read(Rtn, (sizeof(Type) * Size)); \
     return Rtn; \
 }
 

@@ -12,4 +12,4 @@ void ConvertSlash(const char* Src, char* Dst);
 int TokenCount(const char* Path);
 
 // returns token specified by Token from Path
-char* PathToken(const char* Path, int Length, int Token);
+char* PathToken(const char* Path, int Token);

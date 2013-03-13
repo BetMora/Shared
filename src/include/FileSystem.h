@@ -4,21 +4,18 @@ class FileSystem
 {
 public:
 	void    RemoveFile(const char* Name);
+    void    RenameFile(const char* SrcName, const char* DstName);
 	void    CopyFile(const char* SrcPath, const char* DstPath);
 	void    MoveFile(const char* SrcPath, const char* DstPath);
-	void    RenameFile(const char* SrcName, const char* DstName);
+
+    // creates directory tree from specified path
+    void    CreateDirectoryTreeFromPath(const char* Path);
+
+    // checks if file or directory exist
+    bool    IsExist(const char* Path);
 
 	char*   HomeDirectory();
 
 	void    CreateDirectory(const char* Path);
 	void    RemoveDirectory(const char* Path);
 };
-
-// todo
-// 1.	create directory tree from path string
-//		\Root\Sub1\Sub2
-//		Will result creating tree like this:
-//		Root
-//		Root\Sub1
-//		Root\Sub1\Sub2
-// 2.	add file/directory existense functions

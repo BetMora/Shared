@@ -1,5 +1,5 @@
 #include "StringUtils.h"
-
+#include <iostream>
 #include <cstring>
 
 char* Strdup(const char* Str)
@@ -62,84 +62,77 @@ void ConvertSlash(const char* Src, char* Dst)
 
 int TokenCount(const char* Path)
 {
-	int		Result	= 0;
-	bool	HadChar = false;
+	int Result = 0;
 
 	while(*Path != '\0')
 	{
 		switch(*Path)
 		{
-		case 0:
 		case '/':
 		case '\\':
-			if(!HadChar)
-				break;
-
 			Result++;
-
-			HadChar = false;
 			break;
 		default:
-			HadChar = true;
 			break;
-		}
-
-		Path++;
-	}
-
-	return Result;
-}
-
-char* PathToken(const char* Path, int* Length, int Token)
-{
-	size_t	Len	= 0;
-	int		Count	= 0;
-	bool Char = false, Slash = false;
-
-	const char* Ptr;
-	Ptr = Path;
-
-	while(*Path != '\0')
-	{
-		switch(*Path)
-		{
-		case 0:
-		case '/':
-		case '\\':
-			Slash = true;
-
-			if(!Char)
-				break;
-
-			if(Count++ == Token)
-			{
-				while(Len && (Ptr[Len - 1] == ' '))
-					Len--;
-
-				if(Length)
-					*Length = Len;
-
-				return (char*)Ptr;
-			}
-
-			Char = false;
-			break;
-		default:
-			Char = true;
-			Len++;
-
-			if(!Slash)
-				break;
-
-			Slash = false;
-
-			Ptr = Path;
-
-			Len = 1;
 		}
 
 		*Path++;
 	}
 
-	return 0;
+	return Result;
+}
+
+char* PathToken(const char* Path, int Token)
+{
+	size_t  Length          = strlen(Path);
+	int     Count           = 0;
+    int     CountToken      = 0;
+    int*    Tokens          = new int[128];
+    memset(Tokens, 0, sizeof(int) * 128);
+
+	const char* Ptr;
+	Ptr = Path;
+
+    char* Buffer = new char[Length];
+    memset(Buffer, 0, Length);
+
+	while(*Ptr != '\0')
+	{
+		switch(*Ptr)
+		{
+		case '/':
+		case '\\':
+            CountToken++;
+            Tokens[CountToken] = Count + 1;
+
+			break;
+		default:
+            break;
+		}
+
+		*Ptr++;
+        Count++;
+    }
+
+    if(Token <= CountToken)
+    {
+        // -1 is to delete slash out of path
+        int TokenLength = Tokens[Token] - Tokens[Token - 1] - 1;
+
+        int i = 0;
+
+        for(int n = Tokens[Token - 1]; n < Tokens[Token]; n++)
+        {
+            if(i != TokenLength)
+                Buffer[i] = Path[n];
+
+            i++;
+        }
+
+        delete Tokens;
+
+        return Buffer;
+    }
+    else
+        return 0;
 }
