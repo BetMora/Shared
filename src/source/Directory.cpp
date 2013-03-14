@@ -140,6 +140,8 @@ size_t  Directory::DirectoriesNum()
 
 char* Directory::FindFile(const char* Name)
 {
+    bool AnyMatched = false;
+
     if(mData->IsOpened)
     {
 	    if(mData->FilesNum != 0)
@@ -157,19 +159,22 @@ char* Directory::FindFile(const char* Name)
                             if(mData->CachedFiles[n].length() != 0)
                             {
                                 // checking if we have not cached("found before") this file already
-                                if(mData->CachedFiles[n].find(mData->Files[i]) == std::string::npos)
+                                if((mData->CachedFiles[n].find(mData->Files[i]) == std::string::npos) && (AnyMatched == false))
                                 { // no, we didn't
-                                    // so we cache and return it this one
+                                    AnyMatched = false;
+                                    // so we cache and return this one
                                     mData->CachedFiles.push_back(mData->Files[i]);
                                     mData->CachedFilesNum++;
                                     return (char*)mData->Files[i].c_str();
                                 }
+                                else
+                                    AnyMatched = true;
                             }
                         }
                     }
                     else // we have no cached files yet
                     {
-                        // so we cache and return it this one
+                        // so we cache and return this one
                         mData->CachedFiles.push_back(mData->Files[i]);
                         mData->CachedFilesNum++;
                         return (char*)mData->Files[i].c_str();
@@ -179,7 +184,7 @@ char* Directory::FindFile(const char* Name)
         }
     }
 
-	return 0;
+	return "";
 }
 
 char* Directory::FindDirectory(const char* Name)
