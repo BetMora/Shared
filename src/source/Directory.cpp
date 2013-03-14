@@ -159,13 +159,18 @@ char* Directory::FindFile(const char* Name)
                             if(mData->CachedFiles[n].length() != 0)
                             {
                                 // checking if we have not cached("found before") this file already
-                                if((mData->CachedFiles[n].find(mData->Files[i]) == std::string::npos) && (AnyMatched == false))
+                                if(mData->CachedFiles[n].find(mData->Files[i]) == std::string::npos)
                                 { // no, we didn't
-                                    AnyMatched = false;
-                                    // so we cache and return this one
-                                    mData->CachedFiles.push_back(mData->Files[i]);
-                                    mData->CachedFilesNum++;
-                                    return (char*)mData->Files[i].c_str();
+                                    // if we didn't found this file in cached ones before
+                                    if(AnyMatched == false)
+                                    {
+                                        // so we cache and return this one
+                                        mData->CachedFiles.push_back(mData->Files[i]);
+                                        mData->CachedFilesNum++;
+                                        return (char*)mData->Files[i].c_str();
+                                    }
+                                    else
+                                        return 0;
                                 }
                                 else
                                     AnyMatched = true;
@@ -184,7 +189,7 @@ char* Directory::FindFile(const char* Name)
         }
     }
 
-	return "";
+	return 0;
 }
 
 char* Directory::FindDirectory(const char* Name)
