@@ -14,15 +14,15 @@
 
 struct DirectoryData
 {
-	bool                            IsOpened;
-	size_t                          FilesNum;
+    bool                            IsOpened;
+    size_t                          FilesNum;
     size_t                          CachedFilesNum;
-	size_t                          DirectoriesNum;
+    size_t                          DirectoriesNum;
     size_t                          CachedDirectoriesNum;
 
-	std::vector<std::string>        Files;
+    std::vector<std::string>        Files;
     std::vector<std::string>        CachedFiles;
-	std::vector<std::string>        Directories;
+    std::vector<std::string>        Directories;
     std::vector<std::string>        CachedDirectories;
 
 	DirectoryData()
@@ -63,7 +63,7 @@ char* AppendEntry(const char* RootPath, const char* DirEntry)
 
 	Tmp[strlen(RootPath)] = '\\';
 
-	for(size_t i = NameSZ + 1, n = 0; i < TmpSZ, n < DirEntrySZ; i++, n++)
+	for(size_t i = NameSZ + 1 /* so we put file name after directory entry */, n = 0; i < TmpSZ, n < DirEntrySZ; i++, n++)
 	{
 		Tmp[i] = DirEntry[n];
 	}
@@ -143,7 +143,9 @@ char* Directory::FindFile(const char* Name)
     if(mData->IsOpened)
     {
 	    if(mData->FilesNum != 0)
+        {
 		    for(size_t i = 0; i < mData->FilesNum; i++)
+            {
 			    // check if any of stored files matches the provided pattern
 			    if(mData->Files[i].find(Name) != std::string::npos)
                 { 
@@ -151,23 +153,30 @@ char* Directory::FindFile(const char* Name)
                     {
                         // for every cached file
                         for(size_t n = 0; n < mData->CachedFilesNum; n++)
-                            // checking if we have not cached("found before") this file already
-                            if(mData->CachedFiles[n].find(mData->Files[i]) == std::string::npos)
-                            { // no, we didn't
-                                // so we cache this one and return it
-                                mData->CachedFiles.push_back(mData->Files[i]);
-                                mData->CachedFilesNum++;
-                                return (char*)mData->Files[i].c_str();
+                        {
+                            if(mData->CachedFiles[n].length() != 0)
+                            {
+                                // checking if we have not cached("found before") this file already
+                                if(mData->CachedFiles[n].find(mData->Files[i]) == std::string::npos)
+                                { // no, we didn't
+                                    // so we cache and return it this one
+                                    mData->CachedFiles.push_back(mData->Files[i]);
+                                    mData->CachedFilesNum++;
+                                    return (char*)mData->Files[i].c_str();
+                                }
                             }
+                        }
                     }
                     else // we have no cached files yet
                     {
-                        // so we cache this one and return it
+                        // so we cache and return it this one
                         mData->CachedFiles.push_back(mData->Files[i]);
                         mData->CachedFilesNum++;
                         return (char*)mData->Files[i].c_str();
                     }
                 }
+            }
+        }
     }
 
 	return 0;
@@ -175,30 +184,6 @@ char* Directory::FindFile(const char* Name)
 
 char* Directory::FindDirectory(const char* Name)
 {
-    if(mData->IsOpened)
-    {
-        if(mData->DirectoriesNum != 0)
-            for(size_t i = 0; i < mData->DirectoriesNum; i++)
-                if(mData->Directories[i].find(Name) != std::string::npos)
-                {
-                    if(mData->CachedDirectories.size() != 0)
-                    {
-                        for(size_t n = 0; n < mData->CachedDirectoriesNum; n++)
-                            if(mData->CachedDirectories[n].find(mData->Directories[i]) == std::string::npos)
-                            {
-                                mData->CachedDirectories.push_back(mData->Directories[i]);
-                                mData->CachedDirectoriesNum++;
-                                return (char*)mData->Directories[i].c_str();
-                            }
-                    }
-                    else
-                    {
-                        mData->CachedDirectories.push_back(mData->Directories[i]);
-                        mData->CachedDirectoriesNum++;
-                        return (char*)mData->Directories[i].c_str();
-                    }
-                }
-    }
 
 	return 0;
 }
