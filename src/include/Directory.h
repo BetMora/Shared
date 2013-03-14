@@ -21,7 +21,3 @@ public:
 private:
 	DirectoryData*	mData;
 };
-
-/* TODO
- * Add support for searching multiple files with a carriage
- * */

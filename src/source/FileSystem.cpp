@@ -8,6 +8,23 @@
 #include <cstdlib>
 #include <cstring>
 #include <memory>
+#include <sys/types.h>
+#include <sys/stat.h>
+
+bool FileSystem::IsExist(const char* Path)
+{
+    /*     struct stat fileinfo;
+
+           return !stat(filename, &fileinfo);
+     **/
+    struct stat St;
+    stat(Path, &St);
+
+    if(((((St.st_mode) & S_IFMT) == S_IFDIR)) || ((((St.st_mode) & S_IFMT) == S_IFREG)))
+        return true;
+
+    return false;
+}
 
 void FileSystem::RemoveFile(const char* Name)
 {
@@ -21,6 +38,9 @@ void FileSystem::RenameFile(const char* SrcName, const char* DstName)
 
 void FileSystem::CopyFile(const char* SrcPath, const char* DstPath)
 {
+    if(!IsExist(SrcPath))
+        return;
+
 	File Input,
 		 Output;
 
@@ -44,6 +64,9 @@ void FileSystem::CopyFile(const char* SrcPath, const char* DstPath)
 
 void FileSystem::MoveFile(const char* SrcPath, const char* DstPath)
 {
+    if(!IsExist(SrcPath) || IsExist(DstPath))
+        return;
+
 	CopyFile(SrcPath, DstPath);
 
 	RemoveFile(SrcPath);
