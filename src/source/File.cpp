@@ -1,6 +1,7 @@
 #include "File.h"
 
 #include <fstream>
+#include <cstring>
 
 struct FileData
 {
@@ -13,7 +14,7 @@ File::File(const char* Name)
 	mData		= new FileData();
 	mData->Name = 0;
 
-	if(Name[0] != '\0')
+	if(Name != 0)
 		Open(Name);
 }
 

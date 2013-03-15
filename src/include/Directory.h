@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Basic.h"
+
 struct DirectoryData;
 
 class Directory

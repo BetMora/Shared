@@ -7,7 +7,7 @@ struct FileData;
 class File : public Stream
 {
 public:
-	File(const char* Name = "");
+	File(const char* Name = 0);
 	virtual ~File();
 
 	bool			Open(const char* Name);
@@ -22,7 +22,7 @@ public:
 	size_t			Size();
 
 	bool			IsEOF();
-	void			Seek(int Offset, int SeekBase);
+	void			Seek(int Offset, int SeekBase = SET);
 	int				Tell();
 private:
 	FileData* mData;
