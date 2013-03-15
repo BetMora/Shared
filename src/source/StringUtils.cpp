@@ -84,17 +84,17 @@ int TokenCount(const char* Path)
 
 char* PathToken(const char* Path, int Token)
 {
-	size_t  Length          = strlen(Path);
-	int     Count           = 0;
-    int     CountToken      = 0;
-    int*    Tokens          = new int[128];
-    memset(Tokens, 0, sizeof(int) * 128);
+	size_t	Length			= strlen(Path);
+	int		Count			= 0;
+	int		CountToken		= 0;
+	int*	Tokens			= new int[128];
+	memset(Tokens, 0, sizeof(int) * 128);
 
 	const char* Ptr;
 	Ptr = Path;
 
-    char* Buffer = new char[Length];
-    memset(Buffer, 0, Length);
+	char* Buffer = new char[Length];
+	memset(Buffer, 0, Length);
 
 	while(*Ptr != '\0')
 	{
@@ -102,37 +102,37 @@ char* PathToken(const char* Path, int Token)
 		{
 		case '/':
 		case '\\':
-            CountToken++;
-            Tokens[CountToken] = Count + 1;
+			CountToken++;
+			Tokens[CountToken] = Count + 1;
 
 			break;
 		default:
-            break;
+			break;
 		}
 
 		*Ptr++;
-        Count++;
-    }
+		Count++;
+	}
 
-    if(Token <= CountToken)
-    {
-        // -1 is to delete slash out of path
-        int TokenLength = Tokens[Token] - Tokens[Token - 1] - 1;
+	if(Token <= CountToken)
+	{
+		// -1 is to delete slash out of path
+		int TokenLength = Tokens[Token] - Tokens[Token - 1] - 1;
 
-        int i = 0;
+		int i = 0;
 
-        for(size_t n = Tokens[Token - 1]; n < Tokens[Token]; n++)
-        {
-            if(i != TokenLength)
-                Buffer[i] = Path[n];
+		for(size_t n = Tokens[Token - 1]; n < Tokens[Token]; n++)
+		{
+			if(i != TokenLength)
+				Buffer[i] = Path[n];
 
-            i++;
-        }
+			i++;
+		}
 
-        delete Tokens;
+		delete Tokens;
 
-        return Buffer;
-    }
-    else
-        return 0;
+		return Buffer;
+	}
+	else
+		return 0;
 }

@@ -13,17 +13,17 @@
 
 bool FileSystem::IsExist(const char* Path)
 {
-    /*     struct stat fileinfo;
+	/*	   struct stat fileinfo;
 
-           return !stat(filename, &fileinfo);
-     **/
-    struct stat St;
-    stat(Path, &St);
+		   return !stat(filename, &fileinfo);
+	 **/
+	struct stat St;
+	stat(Path, &St);
 
-    if(((((St.st_mode) & S_IFMT) == S_IFDIR)) || ((((St.st_mode) & S_IFMT) == S_IFREG)))
-        return true;
+	if(((((St.st_mode) & S_IFMT) == S_IFDIR)) || ((((St.st_mode) & S_IFMT) == S_IFREG)))
+		return true;
 
-    return false;
+	return false;
 }
 
 void FileSystem::RemoveFile(const char* Name)
@@ -33,13 +33,13 @@ void FileSystem::RemoveFile(const char* Name)
 
 void FileSystem::RenameFile(const char* SrcName, const char* DstName)
 {
-    rename(SrcName, DstName);
+	rename(SrcName, DstName);
 }
 
 void FileSystem::CopyFile(const char* SrcPath, const char* DstPath)
 {
-    if(!IsExist(SrcPath))
-        return;
+	if(!IsExist(SrcPath))
+		return;
 
 	File Input,
 		 Output;
@@ -50,13 +50,13 @@ void FileSystem::CopyFile(const char* SrcPath, const char* DstPath)
 	size_t Size = Input.Size();
 
 	char* Buffer = new char[Size];
-    memset(Buffer, 0, sizeof(*Buffer) * Size);
+	memset(Buffer, 0, sizeof(*Buffer) * Size);
 
 	Buffer = Input.ReadRaw(Size);
 
 	Output.WriteRaw(Buffer, sizeof(*Buffer) * Size);
 
-    delete Buffer;
+	delete Buffer;
 
 	Input.Close();
 	Output.Close();
@@ -64,8 +64,8 @@ void FileSystem::CopyFile(const char* SrcPath, const char* DstPath)
 
 void FileSystem::MoveFile(const char* SrcPath, const char* DstPath)
 {
-    if(!IsExist(SrcPath) || IsExist(DstPath))
-        return;
+	if(!IsExist(SrcPath) || IsExist(DstPath))
+		return;
 
 	CopyFile(SrcPath, DstPath);
 
@@ -77,9 +77,9 @@ char* FileSystem::HomeDirectory()
 	static char Buffer[1024];
 
 #ifdef WINDOWS
- 	strcpy(Buffer, getenv("USERPROFILE"));
+	strcpy(Buffer, getenv("USERPROFILE"));
 #else
- 	strcpy(Buffer, getenv("HOME"));
+	strcpy(Buffer, getenv("HOME"));
 #endif
 
 	Buffer[sizeof(Buffer) - 1] = '\0';

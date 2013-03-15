@@ -4,47 +4,47 @@
 
 struct TimerData
 {
-    clock_t Start;
-    clock_t End;
+	clock_t Start;
+	clock_t End;
 
-    double Seconds;
+	double Seconds;
 	double Miliseconds;
 
-    TimerData()
-    {
-        Seconds = 0;
-		Miliseconds = 0;
-        Start = 0;
-    }
+	TimerData()
+	{
+		Seconds		= 0;
+		Miliseconds	= 0;
+		Start		= 0;
+	}
 
-    ~TimerData()
-    {
-        Seconds = 0;
+	~TimerData()
+	{
+		Seconds = 0;
 		Miliseconds = 0;
-        End = 0;
-    }
+		End = 0;
+	}
 };
 
 TimerData* Timer::mData = new TimerData();
 
 Timer::Timer()
 {
-    mData = new TimerData();
+	mData = new TimerData();
 }
 
 Timer::~Timer()
 {
-    delete mData;
+	delete mData;
 }
 
 void Timer::Start()
 {
-    mData->Start = clock();
+	mData->Start = clock();
 }
 
 void Timer::Stop()
 {
-    mData->End = clock();
+	mData->End = clock();
 
 	mData->Seconds = ((float)(mData->End - mData->Start) / CLOCKS_PER_SEC);
 	mData->Miliseconds = mData->Seconds / 1000;

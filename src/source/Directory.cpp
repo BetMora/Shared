@@ -15,41 +15,41 @@
 
 struct DirectoryData
 {
-    bool                            IsOpened;
-    size_t                          FilesNum;
-    size_t                          DirectoriesNum;
+	bool							IsOpened;
+	size_t							FilesNum;
+	size_t							DirectoriesNum;
 
-    std::vector<std::string>        Files;
-    std::map<std::string, bool>     CachedFiles;
-    std::vector<std::string>        Directories;
-    std::map<std::string, bool>     CachedDirectories;
+	std::vector<std::string>		Files;
+	std::map<std::string, bool>		CachedFiles;
+	std::vector<std::string>		Directories;
+	std::map<std::string, bool>		CachedDirectories;
 
 	DirectoryData()
 	{
-		IsOpened                = false;
-		FilesNum                = 0;
-		DirectoriesNum          = 0;
+		IsOpened				= false;
+		FilesNum				= 0;
+		DirectoriesNum			= 0;
 	}
 
 	~DirectoryData()
 	{
-		IsOpened                = false;
-		FilesNum                = 0;
-		DirectoriesNum          = 0;
+		IsOpened				= false;
+		FilesNum				= 0;
+		DirectoriesNum			= 0;
 	}
 };
 
 char* AppendEntry(const char* RootPath, const char* DirEntry)
 {
-	size_t      NameSZ      = 0;
-	size_t      DirEntrySZ  = 0;
-	size_t      TmpSZ       = 0;
-	char*       Tmp         = 0;
+	size_t		NameSZ		= 0;
+	size_t		DirEntrySZ	= 0;
+	size_t		TmpSZ		= 0;
+	char*		Tmp			= 0;
 
-	NameSZ              = strlen(RootPath);
-	DirEntrySZ          = strlen(DirEntry);
+	NameSZ				= strlen(RootPath);
+	DirEntrySZ			= strlen(DirEntry);
 	// 2 characters to store separator and null terminating character
-	TmpSZ               = NameSZ + DirEntrySZ + 2;
+	TmpSZ				= NameSZ + DirEntrySZ + 2;
 
 	Tmp = new char[TmpSZ];
 	memset(Tmp, 0, TmpSZ);
@@ -91,7 +91,7 @@ void Directory::Open(const char* Name)
 
 	while((DirEntry = readdir(Dir)) != 0)
 	{
-		if((strcmp(DirEntry->d_name, ".") != 0)  &&  (strcmp(DirEntry->d_name, "..") != 0)) 
+		if((strcmp(DirEntry->d_name, ".") != 0)	 &&	 (strcmp(DirEntry->d_name, "..") != 0)) 
 		{
 			switch(DirEntry->d_type)
 			{
@@ -124,73 +124,73 @@ bool Directory::IsOpened()
 	return mData->IsOpened;
 }
 
-size_t  Directory::FilesNum()
+size_t	Directory::FilesNum()
 {
 	return mData->FilesNum;
 }
-size_t  Directory::DirectoriesNum()
+size_t	Directory::DirectoriesNum()
 {
 	return mData->DirectoriesNum;
 }
 
 char* Directory::FindFile(const char* Name)
 {
-    if(mData->IsOpened)
-    {
-        if(mData->FilesNum != 0)
-        {
-            for(size_t i = 0; i < mData->FilesNum; i++)
-            {
-                if(mData->Files[i].find(Name) != std::string::npos)
-                { 
-                    if(mData->CachedFiles.size() != 0)
-                    {
-                        if(mData->CachedFiles[mData->Files[i]] == false)
-                        { 
-                            mData->CachedFiles[mData->Files[i]] = true;
-                            return (char*)mData->Files[i].c_str();
-                        }
-                    }
-                    else
-                    {
-                        mData->CachedFiles[mData->Files[i]] = true;
-                        return (char*)mData->Files[i].c_str();
-                    }
-                }
-            }
-        }
-    }
+	if(mData->IsOpened)
+	{
+		if(mData->FilesNum != 0)
+		{
+			for(size_t i = 0; i < mData->FilesNum; i++)
+			{
+				if(mData->Files[i].find(Name) != std::string::npos)
+				{ 
+					if(mData->CachedFiles.size() != 0)
+					{
+						if(mData->CachedFiles[mData->Files[i]] == false)
+						{ 
+							mData->CachedFiles[mData->Files[i]] = true;
+							return (char*)mData->Files[i].c_str();
+						}
+					}
+					else
+					{
+						mData->CachedFiles[mData->Files[i]] = true;
+						return (char*)mData->Files[i].c_str();
+					}
+				}
+			}
+		}
+	}
 
 	return 0;
 }
 
 char* Directory::FindDirectory(const char* Name)
 {
-    if(mData->IsOpened)
-    {
-        if(mData->DirectoriesNum != 0)
-        {
-            for(size_t i = 0; i < mData->DirectoriesNum; i++)
-            {
-                if(mData->Directories[i].find(Name) != std::string::npos)
-                { 
-                    if(mData->CachedDirectories.size() != 0)
-                    {
-                        if(mData->CachedDirectories[mData->Directories[i]] == false)
-                        { 
-                            mData->CachedDirectories[mData->Directories[i]] = true;
-                            return (char*)mData->Directories[i].c_str();
-                        }
-                    }
-                    else
-                    {
-                        mData->CachedDirectories[mData->Directories[i]] = true;
-                        return (char*)mData->Directories[i].c_str();
-                    }
-                }
-            }
-        }
-    }
+	if(mData->IsOpened)
+	{
+		if(mData->DirectoriesNum != 0)
+		{
+			for(size_t i = 0; i < mData->DirectoriesNum; i++)
+			{
+				if(mData->Directories[i].find(Name) != std::string::npos)
+				{ 
+					if(mData->CachedDirectories.size() != 0)
+					{
+						if(mData->CachedDirectories[mData->Directories[i]] == false)
+						{ 
+							mData->CachedDirectories[mData->Directories[i]] = true;
+							return (char*)mData->Directories[i].c_str();
+						}
+					}
+					else
+					{
+						mData->CachedDirectories[mData->Directories[i]] = true;
+						return (char*)mData->Directories[i].c_str();
+					}
+				}
+			}
+		}
+	}
 
 	return 0;
 }

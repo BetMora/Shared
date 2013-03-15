@@ -11,13 +11,13 @@ public:
 		MSec
 	};
 
-    Timer();
-    ~Timer();
+	Timer();
+	~Timer();
 
-    static void Start();
-    static void Stop();
+	static void Start();
+	static void Stop();
 
-    static double GetTime(int Mode);
+	static double GetTime(int Mode);
 private:
-    static TimerData* mData;
+	static TimerData* mData;
 };
