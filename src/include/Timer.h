@@ -17,7 +17,7 @@ public:
 	static void Start();
 	static void Stop();
 
-	static double GetTime(int Mode);
+	static double GetTime(int Mode = MSec);
 private:
 	static TimerData* mData;
 };

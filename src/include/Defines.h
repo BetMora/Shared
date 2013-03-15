@@ -2,6 +2,14 @@
 
 #include <memory>
 
+// Someh elpers
+
+#define IN
+#define OUT
+#define INOUT
+
+// Stream related macroses
+
 #define DECLARE_WRITE(Type, Name) \
 void Name(Type Value);
 
@@ -42,5 +50,7 @@ Type* Stream::Name(size_t Size) \
     Read(Rtn, (sizeof(Type) * Size)); \
     return Rtn; \
 }
+
+// Constant numbers
 
 static const int MaxStringLength = 4096;
