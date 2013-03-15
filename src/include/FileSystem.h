@@ -7,7 +7,7 @@ public:
     // creates directory tree from specified path
     void    CreateDirectoryTreeFromPath(const char* Path);
 
-    bool    IsExist(const char* Path);
+    static bool IsExist(const char* Path);
 
     void    RemoveFile(const char* Name);
     void    RenameFile(const char* SrcName, const char* DstName);

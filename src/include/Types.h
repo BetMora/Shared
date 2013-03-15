@@ -12,6 +12,3 @@ typedef signed long long	sint64;
 
 typedef float				f32;
 typedef double				f64;
-
-// some aliases
-typedef char				byte;

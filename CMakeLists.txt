@@ -13,6 +13,7 @@ set(SOURCE_SHARED ${SOURCE_DIR}/Directory.cpp
 				  ${SOURCE_DIR}/File.cpp
 				  ${SOURCE_DIR}/Stream.cpp
 				  ${SOURCE_DIR}/StringUtils.cpp)
+				  ${SOURCE_DIR}/Timer.cpp
 set(HEADER_SHARED ${INCLUDE_DIR}/Config.h
 				  ${INCLUDE_DIR}/Defines.h
 				  ${INCLUDE_DIR}/Directory.h
@@ -21,6 +22,7 @@ set(HEADER_SHARED ${INCLUDE_DIR}/Config.h
 				  ${INCLUDE_DIR}/Shared.h
 				  ${INCLUDE_DIR}/Stream.h
 				  ${INCLUDE_DIR}/StringUtils.h
+				  ${INCLUDE_DIR}/Timer.h
 				  ${INCLUDE_DIR}/Types.h)
 
 add_library(Shared STATIC ${HEADER_SHARED} ${SOURCE_SHARED})
