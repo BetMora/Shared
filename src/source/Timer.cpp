@@ -1,5 +1,7 @@
 #include "Timer.h"
 
+#include <ctime>
+
 clock_t	Timer::mStart		= 0;
 clock_t	Timer::mEnd			= 0;
 
