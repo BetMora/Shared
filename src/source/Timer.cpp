@@ -1,68 +1,22 @@
 #include "Timer.h"
 
-#include <ctime>
+clock_t	Timer::mStart		= 0;
+clock_t	Timer::mEnd			= 0;
 
-struct TimerData
-{
-	clock_t Start;
-	clock_t End;
-
-	double	Seconds;
-	double	Miliseconds;
-
-	TimerData()
-	{
-		Seconds		= 0;
-		Miliseconds	= 0;
-		Start		= 0;
-		End			= 0;
-	}
-
-	~TimerData()
-	{
-		Seconds		= 0;
-		Miliseconds = 0;
-		Start		= 0;
-		End			= 0;
-	}
-};
-
-TimerData* Timer::mData = new TimerData();
-
-// extern long long rdtsc() 
-// {
-// 	long long x;
-// 	__asm volatile ("rdtsc\n\tshl $32, %%rdx\n\tor %%rdx, %%rax" : "=a" (x) : : "rdx");
-// 	return x;
-// }
-
-// __declspec(naked) unsigned long long rdtsc(void)
-// {
-// 	__asm rdtsc;
-// 	__asm retn;
-// }
-
-Timer::Timer()
-{
-	mData = new TimerData();
-}
-
-Timer::~Timer()
-{
-	delete mData;
-}
+double	Timer::mSeconds		= 0;
+double	Timer::mMiliseconds = 0;
 
 void Timer::Start()
 {
-	mData->Start = clock();
+	mStart = clock();
 }
 
 void Timer::Stop()
 {
-	mData->End = clock();
+	mEnd = clock();
 
-	mData->Seconds		= ((double)(mData->End - mData->Start) / CLOCKS_PER_SEC);
-	mData->Miliseconds	= (double)(mData->End - mData->Start);
+	mSeconds		= ((double)(mEnd - mStart) / CLOCKS_PER_SEC);
+	mMiliseconds	= (double)(mEnd - mStart);
 }
 
 double Timer::GetTime(int Mode)
@@ -70,13 +24,14 @@ double Timer::GetTime(int Mode)
 	switch(Mode)
 	{
 	case Sec:
-		return mData->Seconds;
+		return mSeconds;
 		break;
 	case MSec:
-		return mData->Miliseconds;
+		return mMiliseconds;
 		break;
 	default:
-		return 0;
 		break;
 	}
+
+	return 0;
 }

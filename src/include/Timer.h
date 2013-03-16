@@ -1,6 +1,6 @@
 #pragma once
 
-struct TimerData;
+#include <ctime>
 
 class Timer
 {
@@ -11,13 +11,14 @@ public:
 		MSec
 	};
 
-	Timer();
-	~Timer();
-
 	static void Start();
 	static void Stop();
 
 	static double GetTime(int Mode = MSec);
 private:
-	static TimerData* mData;
+	static clock_t	mStart;
+	static clock_t	mEnd;
+
+	static double	mSeconds;
+	static double	mMiliseconds;
 };
