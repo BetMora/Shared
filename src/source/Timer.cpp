@@ -27,6 +27,19 @@ struct TimerData
 
 TimerData* Timer::mData = new TimerData();
 
+// extern long long rdtsc() 
+// {
+// 	long long x;
+// 	__asm volatile ("rdtsc\n\tshl $32, %%rdx\n\tor %%rdx, %%rax" : "=a" (x) : : "rdx");
+// 	return x;
+// }
+
+// __declspec(naked) unsigned long long rdtsc(void)
+// {
+// 	__asm rdtsc;
+// 	__asm retn;
+// }
+
 Timer::Timer()
 {
 	mData = new TimerData();

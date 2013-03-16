@@ -11,8 +11,6 @@ char* Strdup(const char* Str)
 
 	strcpy(Dest, Str);
 
-	delete Str;
-
 	return Dest;
 }
 
@@ -30,8 +28,6 @@ char* Strndup(const char* Str, size_t MaxCount)
 	memcpy(Dest, Str, MaxCount);
 
 	Dest[MaxCount] = 0;
-
-	delete Str;
 
 	return Dest;
 }
@@ -55,7 +51,7 @@ void ConvertSlash(const char* Src, char* Dst)
 			break;
 		}
 
-		*Src++;
+		Src++;
 		Count++;
 	}
 }
@@ -64,10 +60,12 @@ int TokenCount(const char* Path)
 {
 	int Result = 0;
 
-	while(*Path != '\0')
+	//while(*Path)
+	for(;;)
 	{
 		switch(*Path)
 		{
+		case '\0':
 		case '/':
 		case '\\':
 			Result++;
@@ -76,7 +74,11 @@ int TokenCount(const char* Path)
 			break;
 		}
 
-		*Path++;
+		// little hack, if path is C:\TestDir we'll be able to have 2 tokens and get last one for some purposes :)
+		if(*Path == '\0')
+			break;
+
+		Path++;
 	}
 
 	return Result;
@@ -86,8 +88,8 @@ char* PathToken(const char* Path, int Token)
 {
 	size_t	Length			= strlen(Path);
 	int		Count			= 0;
-	int		CountToken		= 0;
-	int*	Tokens			= new int[128];
+	int	CountToken		= 0;
+	int*	Tokens		= new int[128];
 	memset(Tokens, 0, sizeof(int) * 128);
 
 	const char* Ptr;
@@ -96,10 +98,12 @@ char* PathToken(const char* Path, int Token)
 	char* Buffer = new char[Length];
 	memset(Buffer, 0, Length);
 
-	while(*Ptr != '\0')
+	//while(*Ptr)
+	for(;;)
 	{
 		switch(*Ptr)
 		{
+		case '\0':
 		case '/':
 		case '\\':
 			CountToken++;
@@ -110,13 +114,17 @@ char* PathToken(const char* Path, int Token)
 			break;
 		}
 
-		*Ptr++;
+		if(*Ptr == '\0')
+			break;
+
+		Ptr++;
 		Count++;
 	}
 
 	if(Token <= CountToken)
 	{
 		// -1 is to delete slash out of path
+		// as Tokens[x] contains something like this: "path\"
 		int TokenLength = Tokens[Token] - Tokens[Token - 1] - 1;
 
 		int i = 0;

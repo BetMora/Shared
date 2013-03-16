@@ -1,5 +1,6 @@
 #include "Directory.h"
 #include "Config.h"
+#include "StringUtils.h"
 
 #ifdef WINDOWS
 #include <Windows.h>
@@ -16,26 +17,24 @@
 struct DirectoryData
 {
 	bool							IsOpened;
-	size_t							FilesNum;
-	size_t							DirectoriesNum;
+	
+	std::string						RootPath;
 
 	std::vector<std::string>		Files;
+	std::vector<std::string>		FilesRelative;
 	std::map<std::string, bool>		CachedFiles;
 	std::vector<std::string>		Directories;
+	std::vector<std::string>		DirectoriesRelative;
 	std::map<std::string, bool>		CachedDirectories;
 
 	DirectoryData()
 	{
-		IsOpened				= false;
-		FilesNum				= 0;
-		DirectoriesNum			= 0;
+		IsOpened = false;
 	}
 
 	~DirectoryData()
 	{
-		IsOpened				= false;
-		FilesNum				= 0;
-		DirectoriesNum			= 0;
+		IsOpened = false;
 	}
 };
 
@@ -45,20 +44,42 @@ char* AppendEntry(const char* RootPath, const char* DirEntry)
 	size_t		DirEntrySZ	= 0;
 	size_t		TmpSZ		= 0;
 	char*		Tmp			= 0;
+	char*		TmpPTR		= 0;
+	bool		Slash		= false;
 
-	NameSZ				= strlen(RootPath);
-	DirEntrySZ			= strlen(DirEntry);
+	NameSZ		= strlen(RootPath);
+	DirEntrySZ	= strlen(DirEntry);
 	// 2 characters to store separator and null terminating character
-	TmpSZ				= NameSZ + DirEntrySZ + 2;
+	TmpSZ		= NameSZ + DirEntrySZ + 2;
 
 	Tmp = new char[TmpSZ];
 	memset(Tmp, 0, TmpSZ);
 
 	strcpy(Tmp, RootPath);
 
-	Tmp[strlen(RootPath)] = '\\';
+// 	TmpPTR = Strdup(Tmp);
+// 
+// 	while(*TmpPTR)
+// 	{
+// 		if(*TmpPTR == '\\' || *TmpPTR == '/')
+// 		{
+// 			Slash = true;
+// 			break;
+// 		}
+// 
+// 		TmpPTR++;
+// 	}
+// 
+// 	if(Slash == false)
+// 	{
+   		Tmp[strlen(RootPath)] = '\\';
+// 		NameSZ += 1; /* so we put file directory entry after slash
+// 					  * as if we add slash manually pointer is set exact to this slash
+// 					  * if slash has been set before, pointer is set to the character after the slash
+// 					  */
+// 	}
 
-	for(size_t i = NameSZ + 1 /* so we put file name after directory entry */, n = 0; i < TmpSZ, n < DirEntrySZ; i++, n++)
+	for(size_t i = NameSZ + 1, n = 0; i < TmpSZ, n < DirEntrySZ; i++, n++)
 	{
 		Tmp[i] = DirEntry[n];
 	}
@@ -82,10 +103,16 @@ Directory::~Directory()
 void Directory::Open(const char* Name)
 {
 	DIR* Dir = opendir(Name);
+
+	if(mData->RootPath.empty())
+		mData->RootPath = Name;
+
 	dirent* DirEntry;
 
 	if(Dir == 0)
 		return;
+
+	std::string Buffer = "";
 
 	mData->IsOpened = true;
 
@@ -93,20 +120,32 @@ void Directory::Open(const char* Name)
 	{
 		if((strcmp(DirEntry->d_name, ".") != 0)	 &&	 (strcmp(DirEntry->d_name, "..") != 0)) 
 		{
+			int TokCount = TokenCount(Name);
+			int RootTokCount = TokenCount(mData->RootPath.c_str());
+
+													/* make sure we put last token aswell. little hack for loop, not for tokenization function itself */
+			for(int n = RootTokCount; n < TokCount + 1; n++)
+			{
+				Buffer.append(PathToken(Name, n));
+				Buffer.append("\\");
+			}
+
 			switch(DirEntry->d_type)
 			{
 			case DT_REG:
 				mData->Files.push_back(AppendEntry(Name, DirEntry->d_name));
-				mData->FilesNum++;
+				mData->FilesRelative.push_back(AppendEntry(Buffer.c_str(), DirEntry->d_name));
 				break;
 			case DT_DIR:
 				mData->Directories.push_back(AppendEntry(Name, DirEntry->d_name));
-				mData->DirectoriesNum++;
+				mData->DirectoriesRelative.push_back(AppendEntry(Buffer.c_str(), DirEntry->d_name));
 				Open(AppendEntry(Name, DirEntry->d_name));
 				break;
 			default:
 				break;
 			}
+
+			Buffer.clear();
 		}
 	}
 
@@ -115,7 +154,6 @@ void Directory::Open(const char* Name)
 
 void Directory::Close()
 {
-	mData->Files.clear();
 	delete mData;
 }
 
@@ -126,24 +164,34 @@ bool Directory::IsOpened()
 
 size_t	Directory::FilesNum()
 {
-	return mData->FilesNum;
+	return mData->Files.size();
 }
 size_t	Directory::DirectoriesNum()
 {
-	return mData->DirectoriesNum;
+	return mData->Directories.size();
+}
+
+std::vector<std::string> Directory::Files()
+{
+	return mData->Files;
+}
+
+std::vector<std::string> Directory::Directories()
+{
+	return mData->Directories;
 }
 
 char* Directory::FindFile(const char* Name)
 {
 	if(mData->IsOpened)
 	{
-		if(mData->FilesNum != 0)
+		if(mData->Files.size() != 0)
 		{
-			for(size_t i = 0; i < mData->FilesNum; i++)
+			for(size_t i = 0; i < mData->Files.size(); i++)
 			{
 				if(mData->Files[i].find(Name) != std::string::npos)
 				{ 
-					if(mData->CachedFiles.size() != 0)
+					if(!mData->CachedFiles.empty())
 					{
 						if(mData->CachedFiles[mData->Files[i]] == false)
 						{ 
@@ -168,13 +216,13 @@ char* Directory::FindDirectory(const char* Name)
 {
 	if(mData->IsOpened)
 	{
-		if(mData->DirectoriesNum != 0)
+		if(mData->Directories.size() != 0)
 		{
-			for(size_t i = 0; i < mData->DirectoriesNum; i++)
+			for(size_t i = 0; i < mData->Directories.size(); i++)
 			{
 				if(mData->Directories[i].find(Name) != std::string::npos)
 				{ 
-					if(mData->CachedDirectories.size() != 0)
+					if(!mData->CachedDirectories.empty())
 					{
 						if(mData->CachedDirectories[mData->Directories[i]] == false)
 						{ 
