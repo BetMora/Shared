@@ -15,6 +15,7 @@ public:
 	void	MoveFile(const char* SrcPath, const char* DstPath);
 
 	char*	HomeDirectory();
+	char*	WorkingDirectory();
 
 	void	CreateDirectory(const char* Path);
 	void	RemoveDirectory(const char* Path);

@@ -21,8 +21,10 @@ public:
 	size_t						FilesNum();
 	size_t						DirectoriesNum();
 
-	std::vector<std::string>	Files();
-	std::vector<std::string>	Directories();
+	char*						RootDirectory();
+
+	std::vector<std::string>	Files(bool Relative = false);
+	std::vector<std::string>	Directories(bool Relative = false);
 
 	char*						FindFile(const char* Name);
 	char*						FindDirectory(const char* Name);

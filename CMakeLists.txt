@@ -17,6 +17,7 @@ set(SOURCE_SHARED	${SOURCE_DIR}/Directory.cpp
 set(HEADER_SHARED	${INCLUDE_DIR}/Config.h
 					${INCLUDE_DIR}/Defines.h
 					${INCLUDE_DIR}/Directory.h
+					${INCLUDE_DIR}/Endianness.h
 					${INCLUDE_DIR}/FileSystem.h
 					${INCLUDE_DIR}/File.h
 					${INCLUDE_DIR}/Shared.h

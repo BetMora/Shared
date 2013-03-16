@@ -20,7 +20,8 @@ bool FileSystem::IsExist(const char* Path)
 	struct stat St;
 	stat(Path, &St);
 
-	if(((((St.st_mode) & S_IFMT) == S_IFDIR)) || ((((St.st_mode) & S_IFMT) == S_IFREG)))
+	if( (((St.st_mode) & S_IFMT) == S_IFDIR) || 
+		(((St.st_mode) & S_IFMT) == S_IFREG) ) 
 		return true;
 
 	return false;
@@ -78,8 +79,22 @@ char* FileSystem::HomeDirectory()
 
 #ifdef WINDOWS
 	strcpy(Buffer, getenv("USERPROFILE"));
-#else
+#elif LINUX
 	strcpy(Buffer, getenv("HOME"));
+#endif
+
+	Buffer[sizeof(Buffer) - 1] = '\0';
+
+	return Buffer;
+}
+
+char* FileSystem::WorkingDirectory()
+{
+	static char Buffer[1024];
+#ifdef WINDOWS
+	getcwd(Buffer, 1024);
+#elif LINUX
+	strcpy(Buffer, getenv("PWD"));
 #endif
 
 	Buffer[sizeof(Buffer) - 1] = '\0';

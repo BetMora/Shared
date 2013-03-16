@@ -15,12 +15,14 @@ struct TimerData
 		Seconds		= 0;
 		Miliseconds	= 0;
 		Start		= 0;
+		End			= 0;
 	}
 
 	~TimerData()
 	{
 		Seconds		= 0;
 		Miliseconds = 0;
+		Start		= 0;
 		End			= 0;
 	}
 };

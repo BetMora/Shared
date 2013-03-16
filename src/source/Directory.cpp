@@ -21,10 +21,12 @@ struct DirectoryData
 	std::string						RootPath;
 
 	std::vector<std::string>		Files;
-	std::vector<std::string>		FilesRelative;
-	std::map<std::string, bool>		CachedFiles;
 	std::vector<std::string>		Directories;
+
+	std::vector<std::string>		FilesRelative;
 	std::vector<std::string>		DirectoriesRelative;
+
+	std::map<std::string, bool>		CachedFiles;
 	std::map<std::string, bool>		CachedDirectories;
 
 	DirectoryData()
@@ -44,7 +46,6 @@ char* AppendEntry(const char* RootPath, const char* DirEntry)
 	size_t		DirEntrySZ	= 0;
 	size_t		TmpSZ		= 0;
 	char*		Tmp			= 0;
-	char*		TmpPTR		= 0;
 	bool		Slash		= false;
 
 	NameSZ		= strlen(RootPath);
@@ -57,29 +58,22 @@ char* AppendEntry(const char* RootPath, const char* DirEntry)
 
 	strcpy(Tmp, RootPath);
 
-// 	TmpPTR = Strdup(Tmp);
-// 
-// 	while(*TmpPTR)
-// 	{
-// 		if(*TmpPTR == '\\' || *TmpPTR == '/')
-// 		{
-// 			Slash = true;
-// 			break;
-// 		}
-// 
-// 		TmpPTR++;
-// 	}
-// 
-// 	if(Slash == false)
-// 	{
-   		Tmp[strlen(RootPath)] = '\\';
-// 		NameSZ += 1; /* so we put file directory entry after slash
-// 					  * as if we add slash manually pointer is set exact to this slash
-// 					  * if slash has been set before, pointer is set to the character after the slash
-// 					  */
-// 	}
+	int PTRLen	= strlen(Tmp);
 
-	for(size_t i = NameSZ + 1, n = 0; i < TmpSZ, n < DirEntrySZ; i++, n++)
+	// if last character is slash
+	if(Tmp[PTRLen - 1] == '\\' || Tmp[PTRLen - 1] == '/')
+		Slash = true;
+
+	if(Slash == false)
+	{
+   		Tmp[strlen(RootPath)] = '\\';
+		NameSZ += 1; /* so we put file directory entry after slash
+					  * as if we add slash manually, pointer is set exact to this slash
+					  * if slash has been set before, pointer is set to the character after the slash
+					  */
+	}
+
+	for(size_t i = NameSZ, n = 0; i < TmpSZ, n < DirEntrySZ; i++, n++)
 	{
 		Tmp[i] = DirEntry[n];
 	}
@@ -107,6 +101,8 @@ void Directory::Open(const char* Name)
 	if(mData->RootPath.empty())
 		mData->RootPath = Name;
 
+	int RootTokCount = TokenCount(mData->RootPath.c_str());
+
 	dirent* DirEntry;
 
 	if(Dir == 0)
@@ -121,9 +117,9 @@ void Directory::Open(const char* Name)
 		if((strcmp(DirEntry->d_name, ".") != 0)	 &&	 (strcmp(DirEntry->d_name, "..") != 0)) 
 		{
 			int TokCount = TokenCount(Name);
-			int RootTokCount = TokenCount(mData->RootPath.c_str());
 
-													/* make sure we put last token aswell. little hack for loop, not for tokenization function itself */
+			/* adding 1 to make sure we put last token aswell. 
+			 * little hack for loop, not for tokenization function itself */
 			for(int n = RootTokCount; n < TokCount + 1; n++)
 			{
 				Buffer.append(PathToken(Name, n));
@@ -162,22 +158,33 @@ bool Directory::IsOpened()
 	return mData->IsOpened;
 }
 
-size_t	Directory::FilesNum()
+size_t Directory::FilesNum()
 {
 	return mData->Files.size();
 }
-size_t	Directory::DirectoriesNum()
+size_t Directory::DirectoriesNum()
 {
 	return mData->Directories.size();
 }
 
-std::vector<std::string> Directory::Files()
+char* Directory::RootDirectory()
 {
+	return PathToken(mData->RootPath.c_str(), TokenCount(mData->RootPath.c_str()));
+}
+
+std::vector<std::string> Directory::Files(bool Relative)
+{
+	if(Relative)
+		return mData->FilesRelative;
+
 	return mData->Files;
 }
 
-std::vector<std::string> Directory::Directories()
+std::vector<std::string> Directory::Directories(bool Relative)
 {
+	if(Relative)
+		return mData->DirectoriesRelative;
+
 	return mData->Directories;
 }
 
