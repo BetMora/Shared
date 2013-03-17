@@ -2,7 +2,7 @@
 
 #include <memory>
 
-// Someh elpers
+// Some helpers
 
 #define IN
 #define OUT

@@ -15,3 +15,6 @@ int TokenCount(const char* Path);
 
 // returns token specified by Token from Path
 char* PathToken(const char* Path, int Token);
+
+char* SplitPathFromFileName(const char* FileName);
+char* SplitFileNameFromPath(const char* Path);

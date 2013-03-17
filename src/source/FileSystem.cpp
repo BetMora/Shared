@@ -10,6 +10,28 @@
 #include <memory>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <string>
+
+void FileSystem::CreateDirectoryTreeFromPath(const char* Path)
+{
+	int TokensCount = TokenCount(Path);
+	std::string Buffer;
+	std::string Temp;
+
+	for(size_t i = 2; i < TokensCount + 1; i++)
+	{
+		for(size_t n = 1; n < i + 1; n++)
+		{
+			Temp.append(PathToken(Path, n));
+			Temp.append("\\");
+		}
+
+		if(!IsExist(Temp.c_str()))
+			CreateDirectory(Temp.c_str());
+
+		Temp.clear();
+	}
+}
 
 bool FileSystem::IsExist(const char* Path)
 {

@@ -1,5 +1,6 @@
 #include "StringUtils.h"
 
+#include <string>
 #include <cstring>
 
 char* Strdup(const char* Str)
@@ -143,4 +144,26 @@ char* PathToken(const char* Path, int Token)
 	}
 	else
 		return 0;
+}
+
+char* SplitPathFromFileName(const char* FileName)
+{
+	int TokensCount = TokenCount(FileName);
+	std::string Temp;
+
+	// we don't add 1 to tokenscount as we don't want the filename to be append
+	for(size_t i = 1; i < TokensCount; i++)
+	{
+		Temp.append(PathToken(FileName, i));
+		Temp.append("\\");
+	}
+
+	return Strdup(Temp.c_str());
+}
+
+char* SplitFileNameFromPath(const char* Path)
+{
+	int TokensCount = TokenCount(Path);
+
+	return PathToken(Path, TokensCount);
 }
