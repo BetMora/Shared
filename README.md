@@ -1,13 +1,14 @@
 Shared
 ======
-Little shared\utility library mostly features a functions to handle binary files.
+Little library aimed to provide features to work with binary files(data serialization\deserialization)
 
 Features:
 ------
 * Binary file I/O
 * Directory handling
-* Some string utilities
-* High-resolution timer(processor time)
+* String utilities
+* High-resolution timer(processor time, 1ms resolution on my system)
+* Very-very basic logging
 
 Planned features:
 ------
@@ -17,6 +18,5 @@ Planned features:
 Current TODO list
 ------
 * Buffer implementation
-* Logging implementation
 * Make CMake script determite what OS it is ran on and create Configure.h file based on this. 
 Currently we need only Unix/Windows, Little-Endian/Big-Endian defines

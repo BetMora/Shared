@@ -8,6 +8,7 @@
 #include "Endianness.h"
 #include "File.h"
 #include "FileSystem.h"
+#include "Log.h"
 #include "Stream.h"
 #include "StringUtils.h"
 #include "Timer.h"
