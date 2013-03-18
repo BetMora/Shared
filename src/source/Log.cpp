@@ -3,6 +3,7 @@
 #include <ctime>
 #include <sstream>
 #include <fstream>
+#include <iostream>
 
 static const char* InfoMessage		= "[INFO] ";
 static const char* WarningMessage	= "[WARNING] ";
@@ -11,6 +12,7 @@ static const char* FatalMessage		= "[FATAL] ";
 static const char* TimeFormat		= "[%X]"; // 23:59:59
 
 std::string Log::mFileName = "Output.log";
+bool Log::mOutputToConsole = true;
 
 void Log::FileName(const char* Name)
 {
@@ -57,6 +59,9 @@ void Log::Output(const char* Message, int LogLevel /* = Info */)
 	Buffer << Message << "\n";
 
 	File << Buffer.str();
+
+	if(mOutputToConsole)
+		std::cout << Buffer.str();
 
 	File.close();
 }

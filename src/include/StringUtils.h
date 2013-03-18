@@ -18,3 +18,4 @@ char* PathToken(const char* Path, int Token);
 
 char* SplitPathFromFileName(const char* FileName);
 char* SplitFileNameFromPath(const char* Path);
+char* SplitExtension(const char* Path);

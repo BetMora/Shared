@@ -167,3 +167,25 @@ char* SplitFileNameFromPath(const char* Path)
 
 	return PathToken(Path, TokensCount);
 }
+
+char* SplitExtension(const char* Path)
+{
+	int TokensCount = TokenCount(Path);
+
+	std::string Temp;
+
+	Temp = PathToken(Path, TokensCount);
+
+	int DotPos = 0;
+
+	if((DotPos = Temp.find(".")) == std::string::npos)
+		return Strdup(Temp.c_str());
+
+	int BufferSize = Temp.size() - DotPos;
+
+	char* Buffer = new char[BufferSize];
+	Temp.copy(Buffer, BufferSize, DotPos);
+	Buffer[BufferSize] = '\0';
+
+	return Buffer;
+}

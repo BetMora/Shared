@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Stream.h"
+#include "Buffer.h"
 
 struct FileData;
 
@@ -17,6 +18,8 @@ public:
 	virtual size_t	Read(void* Data, size_t Size);
 
 	virtual bool	IsOpened();
+
+	void			ReadFileToBuffer(Buffer* Buf);
 
 	const char*		Name();
 	size_t			Size();

@@ -58,6 +58,12 @@ bool File::IsOpened()
 	return false;
 }
 
+void File::ReadFileToBuffer(Buffer* Buf)
+{
+	// some hack, still dont know why it happens
+	Buf->WriteRaw(ReadRaw(Size() + 1), Size());
+}
+
 size_t File::Write(void* Data, size_t Size)
 {
 	mData->File.write((char*)Data, Size);
@@ -104,11 +110,15 @@ void File::Seek(int Offset, int SeekBase)
 		break;
 	case BEG:
 		mData->File.seekg(Offset, std::ios::beg);
+		break;
 	case END:
 		mData->File.seekg(Offset, std::ios::end);
 		break;
 	case CUR:
 		mData->File.seekg(Offset, std::ios::cur);
+		break;
+	default:
+		break;
 	}
 }
 
