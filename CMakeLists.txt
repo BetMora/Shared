@@ -2,32 +2,37 @@ cmake_minimum_required(VERSION 2.8)
 
 project(Shared)
 
-set(INCLUDE_DIR src/include)
-set(SOURCE_DIR src/source)
+include_directories(src/Buffer/include
+					src/Common/include
+					src/Compression/include
+					src/FileSystem/include
+					src/Log/include
+					src/Stream/include
+					external
+					external/zlib-1.2.7)
 
-include_directories(${INCLUDE_DIR})
-include_directories(external)
+set(SOURCE_SHARED	src/Buffer/source/Buffer.cpp
+					src/Common/source/StringUtils.cpp
+					src/Common/source/Timer.cpp
+					src/Compression/source/ZLIBCompressor.cpp
+					src/FileSystem/source/Directory.cpp
+					src/FileSystem/source/File.cpp
+					src/FileSystem/source/FileSystem.cpp
+					src/Log/source/Log.cpp
+					src/Stream/source/Stream.cpp)
+set(INCLUDE_SHARED	src/Buffer/include/Buffer.h
+					src/Common/include/Basic.h
+					src/Common/include/Defines.h
+					src/Common/include/Endianness.h
+					src/Common/include/Shared.h
+					src/Common/include/StringUtils.h
+					src/Common/include/Timer.h
+					src/Common/include/Types.h
+					src/Compression/include/ZLIBCompressor.h
+					src/FileSystem/include/Directory.h
+					src/FileSystem/include/File.h
+					src/FileSystem/include/FileSystem.h
+					src/Log/include/Log.h
+					src/Stream/include/Stream.h)
 
-set(SOURCE_SHARED	${SOURCE_DIR}/Buffer.cpp
-					${SOURCE_DIR}/Directory.cpp
-					${SOURCE_DIR}/FileSystem.cpp
-					${SOURCE_DIR}/File.cpp
-					${SOURCE_DIR}/Log.cpp
-					${SOURCE_DIR}/Stream.cpp
-					${SOURCE_DIR}/StringUtils.cpp
-					${SOURCE_DIR}/Timer.cpp)
-set(HEADER_SHARED	${INCLUDE_DIR}/Buffer.h
-					${INCLUDE_DIR}/Config.h
-					${INCLUDE_DIR}/Defines.h
-					${INCLUDE_DIR}/Directory.h
-					${INCLUDE_DIR}/Endianness.h
-					${INCLUDE_DIR}/FileSystem.h
-					${INCLUDE_DIR}/File.h
-					${INCLUDE_DIR}/Log.h
-					${INCLUDE_DIR}/Shared.h
-					${INCLUDE_DIR}/Stream.h
-					${INCLUDE_DIR}/StringUtils.h
-					${INCLUDE_DIR}/Timer.h
-					${INCLUDE_DIR}/Types.h)
-
-add_library(Shared STATIC ${HEADER_SHARED} ${SOURCE_SHARED})
+add_library(Shared STATIC ${INCLUDE_SHARED} ${SOURCE_SHARED})
