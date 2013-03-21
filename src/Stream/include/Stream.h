@@ -17,8 +17,8 @@ public:
 
 	virtual ~Stream() { }
 
-	virtual size_t	Write(void* Data, size_t Size) = 0;
-	virtual size_t	Read(void* Data, size_t Size) = 0;
+	virtual void	Write(void* Data, size_t Size) = 0;
+	virtual void	Read(void* Data, size_t Size) = 0;
 
 	virtual bool	IsOpened() = 0;
 

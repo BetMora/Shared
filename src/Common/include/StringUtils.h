@@ -1,14 +1,12 @@
 #pragma once
 
 #include "Basic.h"
+#include <string>
 
-// note: deletes passed string
 char* Strdup(const char* Str);
 char* Strdnup(const char* Str, size_t MaxCount);
 
-// converts one OS slash to another OS slash
-// for example UNIX(/) to Windows(\\) and vice versa
-void ConvertSlash(const char* Src, char* Dst);
+void ConvertSlash(char* String);
 
 // returns number of tokens in the path
 int TokenCount(const char* Path);
@@ -19,3 +17,5 @@ char* PathToken(const char* Path, int Token);
 char* SplitPathFromFileName(const char* FileName);
 char* SplitFileNameFromPath(const char* Path);
 char* SplitExtension(const char* Path);
+
+std::string Format(const char* String, ...);

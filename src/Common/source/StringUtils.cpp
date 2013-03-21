@@ -1,14 +1,14 @@
 #include "StringUtils.h"
 
-#include <string>
 #include <cstring>
+#include <cstdarg>
 
 char* Strdup(const char* Str)
 {
-	char* Dest = new char[strlen(Str) + 1];
-
-	if(Dest == 0)
+	if(Str == 0)
 		return 0;
+
+	char* Dest = new char[strlen(Str) + 1];
 
 	strcpy(Dest, Str);
 
@@ -33,35 +33,40 @@ char* Strndup(const char* Str, size_t MaxCount)
 	return Dest;
 }
 
-void ConvertSlash(const char* Src, char* Dst)
+void ConvertSlash(char* String)
 {
 	int Count = 0;
-	strcpy(Dst, Src);
 
-	while(*Src != '\0')
+	char* Ptr = Strdup(String);
+	char* Start = Ptr;
+
+	while(*Ptr != '\0')
 	{
-		switch(*Src)
+		switch(*Ptr)
 		{
 		case '/':
-			Dst[Count] = '\\';
+			String[Count] = '\\';
 			break;
 		case '\\':
-			Dst[Count] = '/';
+			String[Count] = '/';
 			break;
 		default:
 			break;
 		}
 
-		Src++;
+		Ptr++;
 		Count++;
 	}
+
+	delete [] Start;
+	Start	= 0;
+	Ptr		= 0;
 }
 
 int TokenCount(const char* Path)
 {
 	int Result = 0;
 
-	//while(*Path)
 	for(;;)
 	{
 		switch(*Path)
@@ -75,7 +80,8 @@ int TokenCount(const char* Path)
 			break;
 		}
 
-		// little hack, if path is C:\TestDir we'll be able to have 2 tokens and get last one for some purposes :)
+		// if we write something like while(*Path != '\0'), 
+		// we would not be able to count last token as loop will break immediately upon reaching nul
 		if(*Path == '\0')
 			break;
 
@@ -89,17 +95,13 @@ char* PathToken(const char* Path, int Token)
 {
 	size_t	Length			= strlen(Path);
 	int		Count			= 0;
-	int	CountToken		= 0;
-	int*	Tokens		= new int[128];
+	int		CountToken		= 0;
+	int*	Tokens			= new int[128];
 	memset(Tokens, 0, sizeof(int) * 128);
 
 	const char* Ptr;
 	Ptr = Path;
 
-	char* Buffer = new char[Length];
-	memset(Buffer, 0, Length);
-
-	//while(*Ptr)
 	for(;;)
 	{
 		switch(*Ptr)
@@ -122,20 +124,20 @@ char* PathToken(const char* Path, int Token)
 		Count++;
 	}
 
+	char* Buffer = new char[Length];
+	memset(Buffer, 0, Length);
+
 	if(Token <= CountToken)
 	{
 		// -1 is to delete slash out of path
 		// as Tokens[x] contains something like this: "path\"
 		int TokenLength = Tokens[Token] - Tokens[Token - 1] - 1;
-
-		int i = 0;
-
-		for(size_t n = Tokens[Token - 1]; n < Tokens[Token]; n++)
+		
+		// n = position of first character that belong to selected token
+		// i is used only to fill the buffer
+		for(size_t n = Tokens[Token - 1], i = 0; n < Tokens[Token], i < TokenLength; n++, i++)
 		{
-			if(i != TokenLength)
-				Buffer[i] = Path[n];
-
-			i++;
+			Buffer[i] = Path[n];
 		}
 
 		delete Tokens;
@@ -188,4 +190,33 @@ char* SplitExtension(const char* Path)
 	Buffer[BufferSize] = '\0';
 
 	return Buffer;
+}
+
+std::string Format(const char* String, ...)
+{
+	size_t Size = 512;
+
+	char* Buffer = new char[Size];
+
+	va_list VaList;
+	va_start(VaList, String);
+
+	size_t NSize = vsnprintf(Buffer, Size, String, VaList);
+
+	if(Size <= NSize)
+	{
+		delete[] Buffer;
+
+		Buffer = new char[NSize + 1];
+
+		vsnprintf(Buffer, Size, String, VaList);
+	}
+
+	std::string Ret(Buffer);
+
+	va_end(VaList);
+
+	delete[] Buffer;
+
+	return Ret;
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Basic.h"
+#include "Defines.h"
 
 #include <vector>
 #include <string>
@@ -13,7 +14,7 @@ public:
 	Directory();
 	~Directory();
 
-	void						Open(const char* Name);
+	void						Open(IN const char* Name);
 	void						Close();
 
 	bool						IsOpened();
@@ -23,11 +24,11 @@ public:
 
 	char*						RootDirectory();
 
-	std::vector<std::string>	Files(bool Relative = false);
-	std::vector<std::string>	Directories(bool Relative = false);
+	std::vector<std::string>	Files(IN bool Relative = false);
+	std::vector<std::string>	Directories(IN bool Relative = false);
 
-	char*						FindFile(const char* Name);
-	char*						FindDirectory(const char* Name);
+	char*						FindFile(IN const char* Name);
+	char*						FindDirectory(IN const char* Name);
 private:
 	DirectoryData*	mData;
 };

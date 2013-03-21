@@ -2,29 +2,26 @@
 
 #include <string>
 
-enum // message level
-{
-	Info,
-	Warning,
-	Error,
-	Fatal
-};
-// add features to compose message like this: Output(Error("Blah"));
-// resulting composed message: [15:15:20][ERROR] Blah Directory.cpp, line 180
-
 class Log
 {
 public:
-	static void		FileName(const char* Name);
-	static char*	FileName();
-
-	static void		Output(const char* Message, int LogLevel = Info);
-
-	static void		Console(bool OutputToConSole)
+	enum
 	{
-		mOutputToConsole = OutputToConSole;
-	}
+		Info,
+		Warning,
+		Error,
+		Fatal
+	};
+
+	static void			FileName(std::string Name);
+	static std::string	FileName();
+
+	static void			Output(std::string Message, int LogLevel = Info);
 private:
 	static std::string	mFileName;
-	static bool			mOutputToConsole;
+	static bool			mInitialised;
 };
+
+std::string ComposeError(std::string ErrorMessage, const char* Function, const char* File, int Line);
+
+#define Error(ErrorMessage) ComposeError(ErrorMessage, __FUNCTION__, __FILE__, __LINE__)

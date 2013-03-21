@@ -54,7 +54,7 @@ char* Stream::ReadString(bool NullTerminated)
 			Count++;
 		}
 
-		return Strdup(Buffer);
+		return Buffer;
 	}
 
 	uint32 Length = ReadUINT32();

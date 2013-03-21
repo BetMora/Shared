@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Basic.h"
 #include "Types.h"
 
 struct ICompressionHeader

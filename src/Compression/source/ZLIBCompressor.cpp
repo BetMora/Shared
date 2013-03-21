@@ -1,7 +1,7 @@
 #include "ZLIBCompressor.h"
 
 #include <zlib.h>
-#include <memory>
+#include <cstring>
 
 size_t ZLIBCompressor::Compress(char* Dest, size_t DestLen, const char* Src, size_t SrcLen, int CompressionLevel)
 {

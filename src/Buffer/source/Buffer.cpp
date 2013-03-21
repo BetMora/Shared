@@ -1,6 +1,6 @@
 #include "Buffer.h"
 
-#include <memory>
+#include <cstring>
 
 struct BufferData
 {
@@ -45,7 +45,7 @@ Buffer::~Buffer()
 	delete mData;
 }
 
-size_t Buffer::Write(void* Data, size_t Size)
+void Buffer::Write(void* Data, size_t Size)
 {
 	if(mData->Size)
 	{
@@ -59,11 +59,9 @@ size_t Buffer::Write(void* Data, size_t Size)
 
 	mData->Pointer += Size;
 	mData->Size += Size;
-
-	return 0;
 }
 
-size_t Buffer::Read(void* Data, size_t Size)
+void Buffer::Read(void* Data, size_t Size)
 {
 	size_t BytesToEnd = mData->Size - (mData->Pointer - mData->Data);
 
@@ -79,8 +77,6 @@ size_t Buffer::Read(void* Data, size_t Size)
 
 		mData->Pointer += BytesToEnd;
 	}
-
-	return 0;
 }
 
 bool Buffer::IsOpened()

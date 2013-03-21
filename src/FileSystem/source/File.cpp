@@ -60,22 +60,19 @@ bool File::IsOpened()
 
 void File::ReadFileToBuffer(Buffer* Buf)
 {
-	// some hack, still dont know why it happens
+	// FIXME: hack, if we not add 1 this will not read full file
+	// probably bug in Stream::ReadRaw
 	Buf->WriteRaw(ReadRaw(Size() + 1), Size());
 }
 
-size_t File::Write(void* Data, size_t Size)
+void File::Write(void* Data, size_t Size)
 {
 	mData->File.write((char*)Data, Size);
-
-	return mData->File.gcount();
 }
 
-size_t File::Read(void* Data, size_t Size)
+void File::Read(void* Data, size_t Size)
 {
 	mData->File.read((char*)Data, Size);
-
-	return mData->File.gcount();
 }
 
 const char* File::Name()

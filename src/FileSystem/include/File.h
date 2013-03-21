@@ -14,8 +14,8 @@ public:
 	bool			Open(const char* Name);
 	bool			Close();
 
-	virtual size_t	Write(void* Data, size_t Size);
-	virtual size_t	Read(void* Data, size_t Size);
+	virtual void	Write(void* Data, size_t Size);
+	virtual void	Read(void* Data, size_t Size);
 
 	virtual bool	IsOpened();
 

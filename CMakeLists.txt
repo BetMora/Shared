@@ -28,6 +28,7 @@ set(INCLUDE_SHARED	src/Buffer/include/Buffer.h
 					src/Common/include/StringUtils.h
 					src/Common/include/Timer.h
 					src/Common/include/Types.h
+					src/Compression/include/ICompressor.h
 					src/Compression/include/ZLIBCompressor.h
 					src/FileSystem/include/Directory.h
 					src/FileSystem/include/File.h
