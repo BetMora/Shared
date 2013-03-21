@@ -3,7 +3,7 @@
 #include <fstream>
 #include <cstring>
 
-struct FileData
+struct File::FileData
 {
 	std::fstream	File;
 	char*			Name;
@@ -58,13 +58,6 @@ bool File::IsOpened()
 	return false;
 }
 
-void File::ReadFileToBuffer(Buffer* Buf)
-{
-	// FIXME: hack, if we not add 1 this will not read full file
-	// probably bug in Stream::ReadRaw
-	Buf->WriteRaw(ReadRaw(Size() + 1), Size());
-}
-
 void File::Write(void* Data, size_t Size)
 {
 	mData->File.write((char*)Data, Size);
@@ -75,20 +68,18 @@ void File::Read(void* Data, size_t Size)
 	mData->File.read((char*)Data, Size);
 }
 
-const char* File::Name()
+char* File::Name()
 {
 	return mData->Name;
 }
 
 size_t File::Size()
 {
-	int Offset = Tell();
-
 	Seek(0, END);
 
 	size_t Sz = Tell();
 
-	Seek(Offset, SET);
+	Seek(0, BEG);
 
 	return Sz;
 }

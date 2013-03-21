@@ -1,8 +1,11 @@
 #pragma once
 
-#include "ICompressor.h"
-
+#include "Basic.h"
 #include "Types.h"
+#include "Defines.h"
+#include "Config.h"
+
+#include "ICompressor.h"
 
 class ZLIBCompressor : public ICompressor
 {

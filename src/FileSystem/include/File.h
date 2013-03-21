@@ -1,9 +1,11 @@
 #pragma once
 
-#include "Stream.h"
-#include "Buffer.h"
+#include "Basic.h"
+#include "Types.h"
+#include "Defines.h"
+#include "Config.h"
 
-struct FileData;
+#include "Stream.h"
 
 class File : public Stream
 {
@@ -19,14 +21,14 @@ public:
 
 	virtual bool	IsOpened();
 
-	void			ReadFileToBuffer(Buffer* Buf);
-
-	const char*		Name();
-	size_t			Size();
+	virtual char* Data();
+	virtual size_t			Size();
+	char*		Name();
 
 	bool			IsEOF();
 	void			Seek(int Offset, int SeekBase = SET);
 	int				Tell();
 private:
+	struct FileData;
 	FileData* mData;
 };

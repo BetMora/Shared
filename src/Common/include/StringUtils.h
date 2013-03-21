@@ -1,6 +1,10 @@
 #pragma once
 
 #include "Basic.h"
+#include "Types.h"
+#include "Defines.h"
+#include "Config.h"
+
 #include <string>
 
 char* Strdup(const char* Str);

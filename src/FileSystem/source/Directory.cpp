@@ -14,7 +14,7 @@
 #include <string>
 #include <map>
 
-struct DirectoryData
+struct Directory::DirectoryData
 {
 	bool							IsOpened;
 	
@@ -83,7 +83,7 @@ char* AppendEntry(const char* RootPath, const char* DirEntry)
 	return Tmp;
 }
 
-Directory::Directory()
+Directory::Directory(const char* Path /* = "." */)
 {
 	mData = new DirectoryData();
 }

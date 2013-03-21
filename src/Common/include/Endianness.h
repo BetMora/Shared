@@ -2,18 +2,20 @@
 
 #include "Types.h"
 
+/*! Provides few functions to swap byte order
+ */
 namespace Endianness
 {
 	enum
 	{
-		Big,
-		Little
+		Big,   /*!< Big-endian */
+		Little /*!< Little-endian */
 	};
 
 	uint16 Swap(uint16& u16)
 	{
 		uint16 Return = u16;
-		Return =	(Return >> 8) |
+		Return	=	(Return >> 8) |
 					(Return << 8);
 
 		return Return;

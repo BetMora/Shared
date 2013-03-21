@@ -7,38 +7,38 @@
 
 #include "StringUtils.h"
 
-static const char* InfoMessage		= "INFO: ";
-static const char* WarningMessage	= "WARNING: ";
-static const char* ErrorMessage		= "ERROR: ";
-static const char* FatalMessage		= "FATAL: ";
+static const char* WarningMessage	= "Warning";
+static const char* ErrorMessage		= "Error";
+static const char* FatalMessage		= "Fatal";
 static const char* TimeFormat		= "[%X]"; // 23:59:59
 
 static const char* HTMLHeader		=
-	"<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n \
-	 <html>\n \
-	 <head>\n \
-	 <title>Log file</title>\n \
-	 <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>\n \
-	 <style type=\"text/css\">\n \
-		body { background: #eee; color: #b4c8d2; margin-right: 20px; margin-left: 20px; font-size: 14px; font-family: Helvetica; }\n \
-		h1 { text-align: center; color: #626569; }\n \
-		h2 { color: #ffffff; }\n \
-		.m, .w, .e, .f { padding: 3px; overflow: auto; }\n \
-		.m { background-color: #333; color: #ffffff; }\n \
-		.w { background-color: #FFF0AA; color: #626569; }\n \
-		.e { background-color: #FD794B; color: #FDEDD0; }\n \
-		.f { background-color: #FF4229; color: #FDEDD0; }\n \
-		dl { padding: 0 0 0 10px; }\n \
-		dl.section { margin-left: 0px; padding-left: 0px; }\n \
-		dl.warning { margin-left: -7px; padding-left: 3px; border-left: 4px solid; border-color: #FFF0AA; }\n \
-		dl.error { margin-left: -7px; padding-left: 3px; border-left: 4px solid; border-color: #FD794B; }\n \
-		dl.fatal { margin-left: -7px; padding-left: 3px; border-left: 4px solid; border-color: #FF4229; }\n \
-	 </style>\n \
-	 </head>\n \
-	 <body>\n \
-	 <h1>Log file</h1>\n";
+"<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n \
+<html>\n \
+<head>\n \
+<title>Log file</title>\n \
+<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>\n \
+<style type=\"text/css\">\n \
+	body { background: #eee; color: #b4c8d2; margin-right: 20px; margin-left: 20px; font-size: 14px; font-family: Helvetica; }\n \
+	h1 { text-align: left; color: #626569; }\n \
+	tt { align: center; text-align: center; color: #626569; font-size: 16; }\n \
+	.m, .w, .e, .f { padding: 3px; }\n \
+	.m { background-color: #333; color: #ffffff; }\n \
+	.w { background-color: #FFF0AA; color: #626569; }\n \
+	.e { background-color: #FD794B; color: #FDEDD0; }\n \
+	.f { background-color: #FF4229; color: #FDEDD0; }\n \
+	dl { padding: 0 0 0 10px; }\n \
+	dl.section { margin-left: 0px; padding-left: 0px; }\n \
+	dl.warning { margin-left: 0px; padding-left: 3px; border-left: 5px solid; border-color: #FFF0AA; }\n \
+	dl.error { margin-left: 0px; padding-left: 3px; border-left: 5px solid; border-color: #FD794B; }\n \
+	dl.fatal { margin-left: 0px; padding-left: 3px; border-left: 5px solid; border-color: #FF4229; }\n \
+	dl.section dd { padding-left: 15px; padding-right: 3px; }\n \
+</style>\n \
+</head>\n \
+<body>\n \
+<h1>Log file</h1>\n";
 
-std::string Log::mFileName			= "Log.html";
+std::string Log::mFileName			= "";
 bool		Log::mInitialised		= false;
 
 std::string ConvertToHTML(const char* Str)
@@ -85,67 +85,69 @@ std::string Log::FileName()
 
 void Log::Output(std::string Message, int LogLevel /* = Info */)
 {
-	std::fstream		File(mFileName, std::ios::app|std::ios::out);
 	std::stringstream	Buffer;
 
-	if(!mInitialised)
-	{
-		Buffer << HTMLHeader;
-
-		mInitialised = true;
-	}
-
+	/* getting current time */
 	time_t	RawTime;
 	tm*		TimeInfo;
 	char	Time[128];
+	char    FileName[256];
 
 	time(&RawTime);
 	TimeInfo = localtime(&RawTime);
 
 	strftime(Time, 128, TimeFormat, TimeInfo);
+	/*******************************************/
+
+	if(!mInitialised)
+	{
+		strftime(FileName, 256, "%H-%M-%S %d.%m.%Y", TimeInfo);
+
+		mFileName += "Log ";
+		mFileName += FileName;
+		mFileName += ".html";
+
+		Buffer	<< HTMLHeader;
+
+		mInitialised = true;
+	}
 
 	switch(LogLevel)
 	{
 	case Info:
-		Buffer << "<div class=\"m\">";
+		Buffer	<< "<div class=\"m\">" 
+				<< Time << " " << Message 
+				<< "</div>";
 		break;
 	case Warning:
-		Buffer << "<div class=\"w\">";
+		Buffer	<< "<div class=\"m\">" 
+				<< "<dl class=\"section warning\">" 
+				<< "<dt>" << WarningMessage << "</dt>" 
+				<< "<dd>" << Message << "</dd>" 
+				<< "</dl>"
+				<< "</div>";
 		break;
 	case Error:
-		Buffer << "<div class=\"e\">";
+		Buffer	<< "<div class=\"m\">" 
+				<< "<dl class=\"section error\">" 
+				<< "<dt>" << ErrorMessage << "</dt>" 
+				<< "<dd>" << Message << "</dd>" 
+				<< "</dl>"
+				<< "</div>";
 		break;
 	case Fatal:
-		Buffer << "<div class=\"f\">";
+		Buffer	<< "<div class=\"m\">" 
+				<< "<dl class=\"section fatal\">" 
+				<< "<dt>" << FatalMessage << "</dt>" 
+				<< "<dd>" << Message << "</dd>" 
+				<< "</dl>" 
+				<< "</div>";
 		break;
 	default:
 		break;
 	}
 
-	Buffer << Time << " ";
-
-	switch(LogLevel)
-	{
-	case Info:
-		Buffer << InfoMessage;
-		break;
-	case Warning:
-		Buffer << WarningMessage;
-		break;
-	case Error:
-		Buffer << ErrorMessage;
-		break;
-	case Fatal:
-		Buffer << FatalMessage;
-		break;
-	default:
-		break;
-	}
-
-	Buffer << Message << "<br>";
-
-	Buffer << "</div>\n";
-	
+	std::fstream File(mFileName, std::ios::app|std::ios::out);
 	File << Buffer.str();
 
 	File.close();
@@ -157,8 +159,6 @@ std::string ComposeError(std::string ErrorMessage, const char* Function, const c
 
 	Buffer << ErrorMessage << "<br>";
 	Buffer << "File: " << File << " " << "Function: " << Function << "() " << "Line: " << Line; 
-
-	std::string Message(Buffer.str());
-
-	return Message;
+	
+	return Buffer.str();
 }

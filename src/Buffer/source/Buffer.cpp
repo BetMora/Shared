@@ -2,7 +2,7 @@
 
 #include <cstring>
 
-struct BufferData
+struct Buffer::BufferData
 {
 	// the actual size of data inside buffer
 	size_t	Size;

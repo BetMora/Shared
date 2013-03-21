@@ -1,6 +1,6 @@
 #include "Stream.h"
-#include "Config.h"
-#include "Defines.h"
+
+#include "Buffer.h"
 #include "StringUtils.h"
 
 #include <cstring>
@@ -54,7 +54,7 @@ char* Stream::ReadString(bool NullTerminated)
 			Count++;
 		}
 
-		return Buffer;
+		return Strdup(Buffer);
 	}
 
 	uint32 Length = ReadUINT32();
@@ -106,6 +106,18 @@ char* Stream::ReadRaw(size_t Size)
 	Buffer[Count - 1] = '\0';
 	 
 	return Buffer;
+}
+
+void Stream::WriteToBuffer(Buffer* Buf)
+{
+	// FIXME: hack, if we not add 1 this will not read full file
+	// probably bug in Stream::ReadRaw
+	Buf->WriteRaw(ReadRaw(Size() + 1), Size());
+}
+
+void Stream::WriteFromBuffer(Buffer* Buf)
+{
+	WriteRaw(Buf->ReadRaw(Buf->Size()), Buf->Size());
 }
 
 IMPLEMENT_WRITE			(sint8,		   WriteSINT8)

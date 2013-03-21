@@ -3,6 +3,9 @@
 #include "Basic.h"
 #include "Types.h"
 #include "Defines.h"
+#include "Config.h"
+
+class Buffer;
 
 class Stream
 {
@@ -22,12 +25,18 @@ public:
 
 	virtual bool	IsOpened() = 0;
 
+	virtual char*	Data() = 0;
+	virtual size_t	Size() = 0;
+
 	void			WriteString(const char* Str, bool NullTerminated = false);
 	char*			ReadString(bool NullTerminated = false);
 	char*			ReadString(size_t Size);
 
 	void			WriteRaw(void* Buffer, size_t Size);
 	char*			ReadRaw(size_t Size);
+
+	void			WriteToBuffer(Buffer* Buf);
+	void			WriteFromBuffer(Buffer* Buf);
 
 	DECLARE_WRITE		(sint8,		WriteSINT8);
 	DECLARE_READ		(sint8,		ReadSINT8)
