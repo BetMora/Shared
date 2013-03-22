@@ -1,8 +1,9 @@
 #pragma once
 
 #include "Config.h"
-#include "Defines.h"
+
 #include "Types.h"
+#include "Defines.h"
 
 #include "Buffer.h"
 #include "Directory.h"

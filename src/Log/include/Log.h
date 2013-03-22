@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Basic.h"
+#include "Config.h"
+
 #include "Types.h"
 #include "Defines.h"
-#include "Config.h"
 
 #include <string>
 
@@ -18,15 +18,15 @@ public:
 		Fatal
 	};
 
-	static void			FileName(std::string Name);
+	static void			FileName(IN std::string Name);
 	static std::string	FileName();
 
-	static void			Output(std::string Message, int LogLevel = Info);
+	static void			Output(IN std::string Message, IN int LogLevel = Info);
 private:
 	static std::string	mFileName;
 	static bool			mInitialised;
 };
 
-std::string ComposeError(std::string ErrorMessage, const char* Function, const char* File, int Line);
+std::string ComposeError(IN std::string ErrorMessage, IN const char* Function, IN const char* File, IN int Line);
 
 #define Error(ErrorMessage) ComposeError(ErrorMessage, __FUNCTION__, __FILE__, __LINE__)

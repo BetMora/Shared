@@ -1,33 +1,34 @@
 #pragma once
 
-#include "Basic.h"
+#include "Config.h"
+
 #include "Types.h"
 #include "Defines.h"
-#include "Config.h"
 
 #include "Stream.h"
 
 class File : public Stream
 {
 public:
-	File(const char* Name = 0);
+	File(IN const char* Name = 0);
 	virtual ~File();
 
-	bool			Open(const char* Name);
+	bool			Open(IN const char* Name);
 	bool			Close();
 
-	virtual void	Write(void* Data, size_t Size);
-	virtual void	Read(void* Data, size_t Size);
+	virtual void	Write(IN void* Data, IN size_t Size);
+	virtual void	Read(OUT void* Data, IN size_t Size);
 
 	virtual bool	IsOpened();
 
-	virtual char* Data();
-	virtual size_t			Size();
-	char*		Name();
+	virtual char*	Data();
+	virtual size_t	Size();
+	char*			Name();
+
+	int				Tell();
+	void			Seek(int Offset, int SeekBase = SET);
 
 	bool			IsEOF();
-	void			Seek(int Offset, int SeekBase = SET);
-	int				Tell();
 private:
 	struct FileData;
 	FileData* mData;

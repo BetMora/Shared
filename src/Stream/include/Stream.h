@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Basic.h"
+#include "Config.h"
+
 #include "Types.h"
 #include "Defines.h"
-#include "Config.h"
 
 class Buffer;
 
@@ -20,23 +20,23 @@ public:
 
 	virtual ~Stream() { }
 
-	virtual void	Write(void* Data, size_t Size) = 0;
-	virtual void	Read(void* Data, size_t Size) = 0;
+	virtual void	Write(IN void* Data, IN size_t Size) = 0;
+	virtual void	Read(OUT void* Data, IN size_t Size) = 0;
 
 	virtual bool	IsOpened() = 0;
 
 	virtual char*	Data() = 0;
 	virtual size_t	Size() = 0;
 
-	void			WriteString(const char* Str, bool NullTerminated = false);
-	char*			ReadString(bool NullTerminated = false);
-	char*			ReadString(size_t Size);
+	void			WriteString(IN const char* Str, IN bool NullTerminated = false);
+	char*			ReadString(IN bool NullTerminated = false);
+	char*			ReadString(IN size_t Size);
 
-	void			WriteRaw(void* Buffer, size_t Size);
-	char*			ReadRaw(size_t Size);
+	void			WriteRaw(IN void* Buffer, size_t Size);
+	char*			ReadRaw(IN size_t Size);
 
-	void			WriteToBuffer(Buffer* Buf);
-	void			WriteFromBuffer(Buffer* Buf);
+	void			WriteToBuffer(OUT Buffer* Buf);
+	void			WriteFromBuffer(IN Buffer* Buf);
 
 	DECLARE_WRITE		(sint8,		WriteSINT8);
 	DECLARE_READ		(sint8,		ReadSINT8)

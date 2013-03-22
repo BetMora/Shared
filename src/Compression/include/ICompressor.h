@@ -1,18 +1,15 @@
 #pragma once
 
-#include "Basic.h"
+#include "Config.h"
+
 #include "Types.h"
 #include "Defines.h"
-#include "Config.h"
 
 class ICompressor
 {
 public:
-	struct ICompressionHeader
-	{
-		uint32 Signature;
-	};
+	struct ICompressionHeader{};
 
-	virtual size_t Compress(char* Dest, size_t DestLen, const char* Src, size_t SrcLen, int CompressionLevel = 5) = 0;
-	virtual void Decompress(char* Dest, size_t DestLen, const char* Src, size_t SrcLen) = 0;
+	virtual size_t	Compress(OUT char* Dest, IN size_t DestLen, IN const char* Src, IN size_t SrcLen, IN int CompressionLevel = 5) = 0;
+	virtual void	Decompress(OUT char* Dest, IN size_t DestLen, IN const char* Src, IN size_t SrcLen) = 0;
 };

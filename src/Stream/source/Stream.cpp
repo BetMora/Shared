@@ -3,11 +3,10 @@
 #include "Buffer.h"
 #include "StringUtils.h"
 
-#include <cstring>
 #include <cstdio>
-#include <memory>
+#include <cstring>
 
-void Stream::WriteString(const char* Str, bool NullTerminated)
+void Stream::WriteString(IN const char* Str, IN bool NullTerminated)
 {
 	if(NullTerminated)
 	{
@@ -25,7 +24,7 @@ void Stream::WriteString(const char* Str, bool NullTerminated)
 	}
 }
 
-char* Stream::ReadString(bool NullTerminated)
+char* Stream::ReadString(IN bool NullTerminated)
 {
 	if(NullTerminated)
 	{
@@ -69,7 +68,7 @@ char* Stream::ReadString(bool NullTerminated)
 	return Buffer;	
 }
 
-char* Stream::ReadString(size_t Size)
+char* Stream::ReadString(IN size_t Size)
 {
 	char* Buffer = new char[Size];
 	memset(Buffer, 0, sizeof(*Buffer) * Size);
@@ -81,12 +80,12 @@ char* Stream::ReadString(size_t Size)
 	return Buffer;
 }
 
-void Stream::WriteRaw(void* Buffer, size_t Size)
+void Stream::WriteRaw(IN void* Buffer, IN size_t Size)
 {
 	Write(Buffer, Size);
 }
 
-char* Stream::ReadRaw(size_t Size)
+char* Stream::ReadRaw(IN size_t Size)
 {
 	char		Tmp		= 0;
 	int			Count	= 0;
@@ -103,19 +102,15 @@ char* Stream::ReadRaw(size_t Size)
 		Count++;
 	}
 	 
-	Buffer[Count - 1] = '\0';
-	 
 	return Buffer;
 }
 
-void Stream::WriteToBuffer(Buffer* Buf)
+void Stream::WriteToBuffer(OUT Buffer* Buf)
 {
-	// FIXME: hack, if we not add 1 this will not read full file
-	// probably bug in Stream::ReadRaw
-	Buf->WriteRaw(ReadRaw(Size() + 1), Size());
+	Buf->WriteRaw(ReadRaw(Size()), Size());
 }
 
-void Stream::WriteFromBuffer(Buffer* Buf)
+void Stream::WriteFromBuffer(IN Buffer* Buf)
 {
 	WriteRaw(Buf->ReadRaw(Buf->Size()), Buf->Size());
 }

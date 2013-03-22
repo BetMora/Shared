@@ -4,34 +4,30 @@
 
 struct Buffer::BufferData
 {
-	// the actual size of data inside buffer
 	size_t	Size;
-	// maximum size of data that could be put in buffer
 	size_t	Capacity;
-	// current position for seeking, writing, reading
 	char*	Pointer;
-	// the data itself
 	char*	Data;
 
 	BufferData()
 	{
-		Size = 0;
-		Capacity = 0;
-		Pointer = 0;
-		Data = 0;
+		Size		= 0;
+		Capacity	= 0;
+		Pointer		= 0;
+		Data		= 0;
 	}
 
 	~BufferData()
 	{
-		Size = 0;
-		Capacity = 0;
-		Pointer = 0;
+		Size		= 0;
+		Capacity	= 0;
+		Pointer		= 0;
 		delete [] Pointer;
 		delete [] Data;
 	}
 };
 
-Buffer::Buffer(size_t Size)
+Buffer::Buffer(IN size_t Size /* = 8192 */)
 {
 	mData = new BufferData();
 
@@ -45,7 +41,7 @@ Buffer::~Buffer()
 	delete mData;
 }
 
-void Buffer::Write(void* Data, size_t Size)
+void Buffer::Write(IN void* Data, IN size_t Size)
 {
 	if(mData->Size)
 	{
@@ -61,7 +57,7 @@ void Buffer::Write(void* Data, size_t Size)
 	mData->Size += Size;
 }
 
-void Buffer::Read(void* Data, size_t Size)
+void Buffer::Read(OUT void* Data, IN size_t Size)
 {
 	size_t BytesToEnd = mData->Size - (mData->Pointer - mData->Data);
 
@@ -87,7 +83,22 @@ bool Buffer::IsOpened()
 	return false;
 }
 
-void Buffer::Allocate(size_t Capacity)
+char* Buffer::Data()
+{
+	// make sure we have any data at all
+	// probably better to use if(mData->Data)
+	if(mData->Size)
+		return mData->Data;
+	else
+		return 0;
+}
+
+size_t Buffer::Size()
+{
+	return mData->Size;
+}
+
+void Buffer::Allocate(IN size_t Capacity)
 {
 	if(Capacity == 0)
 		return;
@@ -99,7 +110,7 @@ void Buffer::Allocate(size_t Capacity)
 	mData->Pointer = mData->Data;
 }
 
-void Buffer::Resize(size_t Capacity)
+void Buffer::Resize(IN size_t Capacity)
 {
 	if(mData->Capacity == Capacity)
 		return;
@@ -134,7 +145,7 @@ void Buffer::Resize(size_t Capacity)
 void Buffer::Clear()
 {
 	// make sure we allocated memory before, if else - we have nothing to clear
-	if(mData->Capacity)
+	if(mData->Capacity == 0)
 		return;
 
 	mData->Size = 0;
@@ -143,27 +154,12 @@ void Buffer::Clear()
 	delete [] mData->Data;
 }
 
-char* Buffer::Data()
+int Buffer::Tell()
 {
-	// make sure we have any data at all
-	// probably better to use if(mData->Data)
-	if(mData->Size)
-		return mData->Data;
-	else
-		return 0;
+	return (int)(mData->Pointer - mData->Data);
 }
 
-size_t Buffer::Size()
-{
-	return mData->Size;
-}
-
-bool Buffer::IsEOF()
-{
-	return (mData->Pointer - mData->Data >= mData->Size);
-}
-
-void Buffer::Seek(int Offset, int SeekBase)
+void Buffer::Seek(IN int Offset, IN int SeekBase)
 {
 	switch(SeekBase)
 	{
@@ -184,8 +180,7 @@ void Buffer::Seek(int Offset, int SeekBase)
 	}
 }
 
-
-int Buffer::Tell()
+bool Buffer::IsEOF()
 {
-	return (int)(mData->Pointer - mData->Data);
+	return (mData->Pointer - mData->Data >= mData->Size);
 }

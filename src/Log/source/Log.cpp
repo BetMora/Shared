@@ -41,7 +41,7 @@ static const char* HTMLHeader		=
 std::string Log::mFileName			= "";
 bool		Log::mInitialised		= false;
 
-std::string ConvertToHTML(const char* Str)
+std::string ConvertToHTML(IN const char* Str)
 {
 	std::string ReturnString;
 	const char* Ptr = Str;
@@ -73,7 +73,7 @@ std::string ConvertToHTML(const char* Str)
 	return ReturnString;
 }
 
-void Log::FileName(std::string Name)
+void Log::FileName(IN std::string Name)
 {
 	mFileName = Name;
 }
@@ -83,7 +83,7 @@ std::string Log::FileName()
 	return mFileName;
 }
 
-void Log::Output(std::string Message, int LogLevel /* = Info */)
+void Log::Output(IN std::string Message, IN int LogLevel /* = Info */)
 {
 	std::stringstream	Buffer;
 
@@ -153,7 +153,7 @@ void Log::Output(std::string Message, int LogLevel /* = Info */)
 	File.close();
 }
 
-std::string ComposeError(std::string ErrorMessage, const char* Function, const char* File, int Line)
+std::string ComposeError(IN std::string ErrorMessage, IN const char* Function, IN const char* File, IN int Line)
 {
 	std::stringstream Buffer;
 

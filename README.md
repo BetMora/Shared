@@ -9,14 +9,8 @@ Features:
 * String utilities
 * High-resolution timer(processor time, 1ms resolution on my system)
 * Very-very basic logging
+* Data compression(zlib)
 
 Planned features:
 ------
-* Data compression
 * Basic networking using CURL
-
-Current TODO list
-------
-* Buffer implementation
-* Make CMake script determite what OS it is ran on and create Configure.h file based on this. 
-Currently we need only Unix/Windows, Little-Endian/Big-Endian defines

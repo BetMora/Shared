@@ -1,9 +1,10 @@
 #pragma once
 
-#include "Basic.h"
+#include "Config.h"
+
 #include "Types.h"
 #include "Defines.h"
-#include "Config.h"
+
 
 class Timer
 {
@@ -17,7 +18,7 @@ public:
 	static void		Start();
 	static void		Stop();
 
-	static double	GetTime(int Mode = MSec);
+	static double	GetTime(IN int Mode = MSec);
 private:
 	static long		mStart;
 	static long		mEnd;

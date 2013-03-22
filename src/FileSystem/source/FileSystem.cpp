@@ -1,21 +1,36 @@
 #include "FileSystem.h"
-#include "Config.h"
+
 #include "StringUtils.h"
+
 #include "File.h"
 
-#include <direct.h>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
-#include <memory>
+#include <string>
+#include <direct.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <string>
 
-void FileSystem::CreateDirectoryTreeFromPath(const char* Path)
+bool FileSystem::IsExist(IN const char* Path)
+{
+	/*	   struct stat fileinfo;
+
+		   return !stat(filename, &fileinfo);
+	 **/
+	struct stat St;
+	stat(Path, &St);
+
+	if( (((St.st_mode) & S_IFMT) == S_IFDIR) || 
+		(((St.st_mode) & S_IFMT) == S_IFREG) ) 
+		return true;
+
+	return false;
+}
+
+void FileSystem::CreateDirectoryTreeFromPath(IN const char* Path)
 {
 	int TokensCount = TokenCount(Path);
-	std::string Buffer;
 	std::string Temp;
 
 	for(size_t i = 2; i < TokensCount + 1; i++)
@@ -33,33 +48,17 @@ void FileSystem::CreateDirectoryTreeFromPath(const char* Path)
 	}
 }
 
-bool FileSystem::IsExist(const char* Path)
-{
-	/*	   struct stat fileinfo;
-
-		   return !stat(filename, &fileinfo);
-	 **/
-	struct stat St;
-	stat(Path, &St);
-
-	if( (((St.st_mode) & S_IFMT) == S_IFDIR) || 
-		(((St.st_mode) & S_IFMT) == S_IFREG) ) 
-		return true;
-
-	return false;
-}
-
-void FileSystem::RemoveFile(const char* Name)
+void FileSystem::RemoveFile(IN const char* Name)
 {
 	remove(Name);
 }
 
-void FileSystem::RenameFile(const char* SrcName, const char* DstName)
+void FileSystem::RenameFile(IN const char* SrcName, IN const char* DstName)
 {
 	rename(SrcName, DstName);
 }
 
-void FileSystem::CopyFile(const char* SrcPath, const char* DstPath)
+void FileSystem::CopyFile(IN const char* SrcPath, IN const char* DstPath)
 {
 	if(!IsExist(SrcPath))
 		return;
@@ -85,7 +84,7 @@ void FileSystem::CopyFile(const char* SrcPath, const char* DstPath)
 	Output.Close();
 }
 
-void FileSystem::MoveFile(const char* SrcPath, const char* DstPath)
+void FileSystem::MoveFile(IN const char* SrcPath, IN const char* DstPath)
 {
 	if(!IsExist(SrcPath) || IsExist(DstPath))
 		return;
@@ -124,12 +123,12 @@ char* FileSystem::WorkingDirectory()
 	return Buffer;
 }
 
-void FileSystem::CreateDirectory(const char* Path)
+void FileSystem::CreateDirectory(IN const char* Path)
 {
 	_mkdir(Path);
 }
 
-void FileSystem::RemoveDirectory(const char* Path)
+void FileSystem::RemoveDirectory(IN const char* Path)
 {
 	_rmdir(Path);
 }

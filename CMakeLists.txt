@@ -10,18 +10,9 @@ include_directories(src/Buffer/include
 					src/Stream/include
 					external
 					external/zlib-1.2.7)
-
-set(SOURCE_SHARED	src/Buffer/source/Buffer.cpp
-					src/Common/source/StringUtils.cpp
-					src/Common/source/Timer.cpp
-					src/Compression/source/ZLIBCompressor.cpp
-					src/FileSystem/source/Directory.cpp
-					src/FileSystem/source/File.cpp
-					src/FileSystem/source/FileSystem.cpp
-					src/Log/source/Log.cpp
-					src/Stream/source/Stream.cpp)
+					
 set(INCLUDE_SHARED	src/Buffer/include/Buffer.h
-					src/Common/include/Basic.h
+					src/Common/include/Config.h
 					src/Common/include/Defines.h
 					src/Common/include/Endianness.h
 					src/Common/include/Shared.h
@@ -35,5 +26,15 @@ set(INCLUDE_SHARED	src/Buffer/include/Buffer.h
 					src/FileSystem/include/FileSystem.h
 					src/Log/include/Log.h
 					src/Stream/include/Stream.h)
+
+set(SOURCE_SHARED	src/Buffer/source/Buffer.cpp
+					src/Common/source/StringUtils.cpp
+					src/Common/source/Timer.cpp
+					src/Compression/source/ZLIBCompressor.cpp
+					src/FileSystem/source/Directory.cpp
+					src/FileSystem/source/File.cpp
+					src/FileSystem/source/FileSystem.cpp
+					src/Log/source/Log.cpp
+					src/Stream/source/Stream.cpp)
 
 add_library(Shared STATIC ${INCLUDE_SHARED} ${SOURCE_SHARED})

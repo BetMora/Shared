@@ -1,5 +1,5 @@
 #include "Directory.h"
-#include "Config.h"
+
 #include "StringUtils.h"
 
 #ifdef WINDOWS
@@ -10,8 +10,6 @@
 #endif
 
 #include <cstring>
-#include <vector>
-#include <string>
 #include <map>
 
 struct Directory::DirectoryData
@@ -40,7 +38,7 @@ struct Directory::DirectoryData
 	}
 };
 
-char* AppendEntry(const char* RootPath, const char* DirEntry)
+char* AppendEntry(IN const char* RootPath, IN const char* DirEntry)
 {
 	size_t		NameSZ		= 0;
 	size_t		DirEntrySZ	= 0;
@@ -83,7 +81,7 @@ char* AppendEntry(const char* RootPath, const char* DirEntry)
 	return Tmp;
 }
 
-Directory::Directory(const char* Path /* = "." */)
+Directory::Directory(IN const char* Path /* = "." */)
 {
 	mData = new DirectoryData();
 }
@@ -94,7 +92,7 @@ Directory::~Directory()
 		Close();
 }
 
-void Directory::Open(const char* Name)
+void Directory::Open(IN const char* Name)
 {
 	DIR* Dir = opendir(Name);
 
@@ -172,7 +170,7 @@ char* Directory::RootDirectory()
 	return PathToken(mData->RootPath.c_str(), TokenCount(mData->RootPath.c_str()));
 }
 
-std::vector<std::string> Directory::Files(bool Relative)
+std::vector<std::string> Directory::Files(IN bool Relative)
 {
 	if(Relative)
 		return mData->FilesRelative;
@@ -180,7 +178,7 @@ std::vector<std::string> Directory::Files(bool Relative)
 	return mData->Files;
 }
 
-std::vector<std::string> Directory::Directories(bool Relative)
+std::vector<std::string> Directory::Directories(IN bool Relative)
 {
 	if(Relative)
 		return mData->DirectoriesRelative;
@@ -188,7 +186,7 @@ std::vector<std::string> Directory::Directories(bool Relative)
 	return mData->Directories;
 }
 
-char* Directory::FindFile(const char* Name)
+char* Directory::FindFile(IN const char* Name)
 {
 	if(mData->IsOpened)
 	{
@@ -219,7 +217,7 @@ char* Directory::FindFile(const char* Name)
 	return 0;
 }
 
-char* Directory::FindDirectory(const char* Name)
+char* Directory::FindDirectory(IN const char* Name)
 {
 	if(mData->IsOpened)
 	{

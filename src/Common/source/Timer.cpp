@@ -21,7 +21,7 @@ void Timer::Stop()
 	mMiliseconds	= (double)(mEnd - mStart);
 }
 
-double Timer::GetTime(int Mode)
+double Timer::GetTime(IN int Mode)
 {
 	switch(Mode)
 	{

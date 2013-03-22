@@ -1,25 +1,25 @@
 #pragma once
 
-#include "Basic.h"
+#include "Config.h"
+
 #include "Types.h"
 #include "Defines.h"
-#include "Config.h"
 
 class FileSystem
 {
 public:
-	static void		CreateDirectoryTreeFromPath(const char* Path);
+	static bool		IsExist(IN const char* Path);
 
-	static bool		IsExist(const char* Path);
+	static void		CreateDirectoryTreeFromPath(IN const char* Path);
 
-	static void		RemoveFile(const char* Name);
-	static void		RenameFile(const char* SrcName, const char* DstName);
-	static void		CopyFile(const char* SrcPath, const char* DstPath);
-	static void		MoveFile(const char* SrcPath, const char* DstPath);
+	static void		RemoveFile(IN const char* Name);
+	static void		RenameFile(IN const char* SrcName, IN const char* DstName);
+	static void		CopyFile(IN const char* SrcPath, IN const char* DstPath);
+	static void		MoveFile(IN const char* SrcPath, IN const char* DstPath);
 
 	static char*	HomeDirectory();
 	static char*	WorkingDirectory();
 
-	static void		CreateDirectory(const char* Path);
-	static void		RemoveDirectory(const char* Path);
+	static void		CreateDirectory(IN const char* Path);
+	static void		RemoveDirectory(IN const char* Path);
 };

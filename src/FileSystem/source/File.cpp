@@ -1,7 +1,7 @@
 #include "File.h"
 
-#include <fstream>
 #include <cstring>
+#include <fstream>
 
 struct File::FileData
 {
@@ -9,7 +9,7 @@ struct File::FileData
 	char*			Name;
 };
 
-File::File(const char* Name)
+File::File(IN const char* Name)
 {
 	mData		= new FileData();
 	mData->Name = 0;
@@ -23,7 +23,7 @@ File::~File()
 	delete mData;
 }
 
-bool File::Open(const char* Name)
+bool File::Open(IN const char* Name)
 {
 	mData->File.open(Name, std::ios::binary|std::ios::out|std::ios::in|std::ios::app);
 
@@ -58,14 +58,19 @@ bool File::IsOpened()
 	return false;
 }
 
-void File::Write(void* Data, size_t Size)
+void File::Write(IN void* Data, IN size_t Size)
 {
 	mData->File.write((char*)Data, Size);
 }
 
-void File::Read(void* Data, size_t Size)
+void File::Read(IN void* Data, IN size_t Size)
 {
 	mData->File.read((char*)Data, Size);
+}
+
+char* File::Data()
+{
+	return 0;
 }
 
 char* File::Name()
@@ -84,12 +89,12 @@ size_t File::Size()
 	return Sz;
 }
 
-bool File::IsEOF()
+int File::Tell()
 {
-	return mData->File.eof();
+	return mData->File.tellg();
 }
 
-void File::Seek(int Offset, int SeekBase)
+void File::Seek(IN int Offset, IN int SeekBase)
 {
 	switch(SeekBase)
 	{
@@ -110,7 +115,7 @@ void File::Seek(int Offset, int SeekBase)
 	}
 }
 
-int File::Tell()
+bool File::IsEOF()
 {
-	return mData->File.tellg();
+	return mData->File.eof();
 }

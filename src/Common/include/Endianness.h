@@ -2,15 +2,19 @@
 
 #include "Types.h"
 
-/*! Provides few functions to swap byte order
- */
 namespace Endianness
 {
 	enum
 	{
-		Big,   /*!< Big-endian */
-		Little /*!< Little-endian */
+		Big,
+		Little
 	};
+	int Check()
+	{
+		short Word = 0x0001;
+		char* Byte = (char*) &Word;
+		return(Byte[0] ? Little : Big);
+	}
 
 	uint16 Swap(uint16& u16)
 	{

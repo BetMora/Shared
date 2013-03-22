@@ -1,15 +1,25 @@
 #pragma once
 
-#include "Basic.h"
+#include "Config.h"
+
 #include "Types.h"
 #include "Defines.h"
-#include "Config.h"
 
 #include "ICompressor.h"
 
 class ZLIBCompressor : public ICompressor
 {
 public:
-	virtual size_t Compress(char* Dest, size_t DestLen, const char* Src, size_t SrcLen, int CompressionLevel = 5);
-	virtual void Decompress(char* Dest, size_t DestLen, const char* Src, size_t SrcLen);
+	struct ZLIBCompressionHeader : public ICompressor::ICompressionHeader
+	{
+		uint32 Signature;
+
+		ZLIBCompressionHeader()
+		{
+			Signature = 0x311B;
+		}
+	};
+
+	virtual size_t	Compress(OUT char* Dest, IN size_t DestLen, IN const char* Src, IN size_t SrcLen, IN int CompressionLevel = 5);
+	virtual void	Decompress(OUT char* Dest, IN size_t DestLen, IN const char* Src, IN size_t SrcLen);
 };

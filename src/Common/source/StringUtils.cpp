@@ -1,5 +1,6 @@
 #include "StringUtils.h"
 
+#include <cstdio>
 #include <cstring>
 #include <cstdarg>
 

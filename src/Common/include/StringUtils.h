@@ -1,25 +1,25 @@
 #pragma once
 
-#include "Basic.h"
+#include "Config.h"
+
 #include "Types.h"
 #include "Defines.h"
-#include "Config.h"
 
 #include <string>
 
-char* Strdup(const char* Str);
-char* Strdnup(const char* Str, size_t MaxCount);
+char* Strdup(IN const char* Str);
+char* Strdnup(IN const char* Str, IN size_t MaxCount);
 
-void ConvertSlash(char* String);
+void ConvertSlash(IN char* String);
 
 // returns number of tokens in the path
-int TokenCount(const char* Path);
+int TokenCount(IN const char* Path);
 
-// returns token specified by Token from Path
-char* PathToken(const char* Path, int Token);
+// returns token by its number
+char* PathToken(IN const char* Path, int Token);
 
-char* SplitPathFromFileName(const char* FileName);
-char* SplitFileNameFromPath(const char* Path);
-char* SplitExtension(const char* Path);
+char* SplitPathFromFileName(IN const char* FileName);
+char* SplitFileNameFromPath(IN const char* Path);
+char* SplitExtension(IN const char* Path);
 
-std::string Format(const char* String, ...);
+std::string Format(IN const char* String, ...);
