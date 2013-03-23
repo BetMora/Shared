@@ -3,7 +3,7 @@
 #include <zlib.h>
 #include <cstring>
 
-size_t ZLIBCompressor::Compress(char* Dest, size_t DestLen, const char* Src, size_t SrcLen, int CompressionLevel)
+size_t ZLIBCompressor::Compress(OUT char* Dest, IN size_t DestLen, IN const char* Src, IN size_t SrcLen, int CompressionLevel)
 {
 	z_stream ZStr;
 	memset(&ZStr, 0, sizeof(z_stream));
@@ -24,7 +24,7 @@ size_t ZLIBCompressor::Compress(char* Dest, size_t DestLen, const char* Src, siz
 	return TotalOut;
 }
 
-void ZLIBCompressor::Decompress(char* Dest, size_t DestLen, const char* Src, size_t SrcLen)
+size_t ZLIBCompressor::Decompress(OUT char* Dest, IN size_t DestLen, IN const char* Src, IN size_t SrcLen)
 {
 	z_stream ZStr;
 	memset(&ZStr, 0, sizeof(z_stream));
@@ -38,5 +38,9 @@ void ZLIBCompressor::Decompress(char* Dest, size_t DestLen, const char* Src, siz
 
 	inflate(&ZStr, Z_FINISH);
 
+	int TotalOut = ZStr.total_out;
+
 	inflateEnd(&ZStr);
+
+	return TotalOut;
 }

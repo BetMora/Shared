@@ -20,6 +20,7 @@ public:
 
 	virtual char*	Data();
 	virtual size_t	Size();
+	size_t			Capacity();
 
 	void			Allocate(IN size_t Capacity);
 	void			Resize(IN size_t Capactiy);

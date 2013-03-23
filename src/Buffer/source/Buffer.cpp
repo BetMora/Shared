@@ -85,17 +85,17 @@ bool Buffer::IsOpened()
 
 char* Buffer::Data()
 {
-	// make sure we have any data at all
-	// probably better to use if(mData->Data)
-	if(mData->Size)
-		return mData->Data;
-	else
-		return 0;
+	return mData->Data;
 }
 
 size_t Buffer::Size()
 {
 	return mData->Size;
+}
+
+size_t Buffer::Capacity()
+{
+	return mData->Capacity;
 }
 
 void Buffer::Allocate(IN size_t Capacity)
@@ -150,8 +150,11 @@ void Buffer::Clear()
 
 	mData->Size = 0;
 	mData->Capacity = 0;
-	delete [] mData->Pointer;
+
 	delete [] mData->Data;
+
+	mData->Data = 0;
+	mData->Pointer = 0;
 }
 
 int Buffer::Tell()
