@@ -116,14 +116,14 @@ void Log::Output(IN std::string Message, IN int LogLevel /* = Info */)
 	{
 	case Info:
 		Buffer	<< "<div class=\"m\">" 
-				<< Time << " " << Message 
+				<< Time << " " << ConvertToHTML(Message.c_str()) 
 				<< "</div>";
 		break;
 	case Warning:
 		Buffer	<< "<div class=\"m\">" 
 				<< "<dl class=\"section warning\">" 
 				<< "<dt>" << WarningMessage << "</dt>" 
-				<< "<dd>" << Message << "</dd>" 
+				<< "<dd>" << ConvertToHTML(Message.c_str()) << "</dd>" 
 				<< "</dl>"
 				<< "</div>";
 		break;
@@ -131,7 +131,7 @@ void Log::Output(IN std::string Message, IN int LogLevel /* = Info */)
 		Buffer	<< "<div class=\"m\">" 
 				<< "<dl class=\"section error\">" 
 				<< "<dt>" << ErrorMessage << "</dt>" 
-				<< "<dd>" << Message << "</dd>" 
+				<< "<dd>" << ConvertToHTML(Message.c_str()) << "</dd>" 
 				<< "</dl>"
 				<< "</div>";
 		break;
@@ -139,7 +139,7 @@ void Log::Output(IN std::string Message, IN int LogLevel /* = Info */)
 		Buffer	<< "<div class=\"m\">" 
 				<< "<dl class=\"section fatal\">" 
 				<< "<dt>" << FatalMessage << "</dt>" 
-				<< "<dd>" << Message << "</dd>" 
+				<< "<dd>" << ConvertToHTML(Message.c_str()) << "</dd>" 
 				<< "</dl>" 
 				<< "</div>";
 		break;

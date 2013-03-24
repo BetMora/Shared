@@ -12,13 +12,14 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-bool FileSystem::IsExist(IN const char* Path)
+bool FileSystem::IsExists(IN const char* Path)
 {
 	/*	   struct stat fileinfo;
 
 		   return !stat(filename, &fileinfo);
 	 **/
 	struct stat St;
+	memset(&St, 0, sizeof(St));
 	stat(Path, &St);
 
 	if( (((St.st_mode) & S_IFMT) == S_IFDIR) || 
@@ -41,7 +42,7 @@ void FileSystem::CreateDirectoryTreeFromPath(IN const char* Path)
 			Temp.append("\\");
 		}
 
-		if(!IsExist(Temp.c_str()))
+		if(!IsExists(Temp.c_str()))
 			CreateDirectory(Temp.c_str());
 
 		Temp.clear();
@@ -60,7 +61,7 @@ void FileSystem::RenameFile(IN const char* SrcName, IN const char* DstName)
 
 void FileSystem::CopyFile(IN const char* SrcPath, IN const char* DstPath)
 {
-	if(!IsExist(SrcPath))
+	if(!IsExists(SrcPath))
 		return;
 
 	File Input,
@@ -86,7 +87,7 @@ void FileSystem::CopyFile(IN const char* SrcPath, IN const char* DstPath)
 
 void FileSystem::MoveFile(IN const char* SrcPath, IN const char* DstPath)
 {
-	if(!IsExist(SrcPath) || IsExist(DstPath))
+	if(!IsExists(SrcPath) || IsExists(DstPath))
 		return;
 
 	CopyFile(SrcPath, DstPath);

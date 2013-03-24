@@ -8,7 +8,7 @@
 class FileSystem
 {
 public:
-	static bool		IsExist(IN const char* Path);
+	static bool		IsExists(IN const char* Path);
 
 	static void		CreateDirectoryTreeFromPath(IN const char* Path);
 
