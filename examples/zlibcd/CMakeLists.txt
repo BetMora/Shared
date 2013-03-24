@@ -8,7 +8,12 @@ include_directories(../../shared/src/Buffer/include
 					../../shared/src/FileSystem/include
 					../../shared/src/Log/include
 					../../shared/src/Stream/include)
-link_directories(../../../external/zlib-1.2.7/lib)
+					
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+	link_directories(../../../external/zlib-1.2.7/lib/x64)
+else(CMAKE_SIZEOF_VOID_P EQUAL 8)
+	link_directories(../../../external/zlib-1.2.7/lib/x32)
+endif(CMAKE_SIZEOF_VOID_P EQUAL 8)
 
 add_executable(zlibcd src/main.cpp)
 
