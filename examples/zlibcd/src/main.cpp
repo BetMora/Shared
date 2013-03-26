@@ -1,9 +1,10 @@
 #include "Shared.h"
 
+#include <cstdlib>
 #include <string>
 #include <iostream>
 
-int MaxCompressedSize(int SrcLen) 
+int MaxCompressedSize(int SrcLen)
 {
 	int n16kBlocks = (SrcLen + 16383) / 16384; // round up any fraction of a block
 	return (SrcLen + 6 + (n16kBlocks * 5));
@@ -137,6 +138,6 @@ int main(int argc, char** argv)
 	Timer::Stop();
 
 	Log::Output(Format("Execution time: %f(ms)", Timer::GetTime()));
-	
+
 	return 0;
 }

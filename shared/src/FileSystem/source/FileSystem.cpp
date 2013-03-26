@@ -4,11 +4,18 @@
 
 #include "File.h"
 
+#ifdef WINDOWS
+#include <direct.h>
+#endif
+
+#ifdef LINUX
+#include <unistd.h>
+#endif
+
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <string>
-#include <direct.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 
@@ -22,8 +29,8 @@ bool FileSystem::IsExists(IN const char* Path)
 	memset(&St, 0, sizeof(St));
 	stat(Path, &St);
 
-	if( (((St.st_mode) & S_IFMT) == S_IFDIR) || 
-		(((St.st_mode) & S_IFMT) == S_IFREG) ) 
+	if( (((St.st_mode) & S_IFMT) == S_IFDIR) ||
+		(((St.st_mode) & S_IFMT) == S_IFREG) )
 		return true;
 
 	return false;
@@ -101,7 +108,7 @@ char* FileSystem::HomeDirectory()
 
 #ifdef WINDOWS
 	strcpy(Buffer, getenv("USERPROFILE"));
-#elif LINUX
+#elseif LINUX
 	strcpy(Buffer, getenv("HOME"));
 #endif
 
@@ -115,7 +122,7 @@ char* FileSystem::WorkingDirectory()
 	static char Buffer[1024];
 #ifdef WINDOWS
 	getcwd(Buffer, 1024);
-#elif LINUX
+#elseif LINUX
 	strcpy(Buffer, getenv("PWD"));
 #endif
 
@@ -126,10 +133,14 @@ char* FileSystem::WorkingDirectory()
 
 void FileSystem::CreateDirectory(IN const char* Path)
 {
-	_mkdir(Path);
+#ifdef WINDOWS
+	mkdir(Path);
+#elseif LINUX
+    mkdir(Path, 0755);
+#endif
 }
 
 void FileSystem::RemoveDirectory(IN const char* Path)
 {
-	_rmdir(Path);
+	rmdir(Path);
 }

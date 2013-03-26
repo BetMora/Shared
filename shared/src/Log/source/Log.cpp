@@ -115,39 +115,39 @@ void Log::Output(IN std::string Message, IN int LogLevel /* = Info */)
 	switch(LogLevel)
 	{
 	case Info:
-		Buffer	<< "<div class=\"m\">" 
-				<< Time << " " << ConvertToHTML(Message.c_str()) 
+		Buffer	<< "<div class=\"m\">"
+				<< Time << " " << ConvertToHTML(Message.c_str())
 				<< "</div>";
 		break;
 	case Warning:
-		Buffer	<< "<div class=\"m\">" 
-				<< "<dl class=\"section warning\">" 
-				<< "<dt>" << WarningMessage << "</dt>" 
-				<< "<dd>" << ConvertToHTML(Message.c_str()) << "</dd>" 
+		Buffer	<< "<div class=\"m\">"
+				<< "<dl class=\"section warning\">"
+				<< "<dt>" << WarningMessage << "</dt>"
+				<< "<dd>" << ConvertToHTML(Message.c_str()) << "</dd>"
 				<< "</dl>"
 				<< "</div>";
 		break;
 	case Error:
-		Buffer	<< "<div class=\"m\">" 
-				<< "<dl class=\"section error\">" 
-				<< "<dt>" << ErrorMessage << "</dt>" 
-				<< "<dd>" << ConvertToHTML(Message.c_str()) << "</dd>" 
+		Buffer	<< "<div class=\"m\">"
+				<< "<dl class=\"section error\">"
+				<< "<dt>" << ErrorMessage << "</dt>"
+				<< "<dd>" << ConvertToHTML(Message.c_str()) << "</dd>"
 				<< "</dl>"
 				<< "</div>";
 		break;
 	case Fatal:
-		Buffer	<< "<div class=\"m\">" 
-				<< "<dl class=\"section fatal\">" 
-				<< "<dt>" << FatalMessage << "</dt>" 
-				<< "<dd>" << ConvertToHTML(Message.c_str()) << "</dd>" 
-				<< "</dl>" 
+		Buffer	<< "<div class=\"m\">"
+				<< "<dl class=\"section fatal\">"
+				<< "<dt>" << FatalMessage << "</dt>"
+				<< "<dd>" << ConvertToHTML(Message.c_str()) << "</dd>"
+				<< "</dl>"
 				<< "</div>";
 		break;
 	default:
 		break;
 	}
 
-	std::fstream File(mFileName, std::ios::app|std::ios::out);
+	std::fstream File(mFileName.c_str(), std::ios::app|std::ios::out);
 	File << Buffer.str();
 
 	File.close();
@@ -158,7 +158,7 @@ std::string ComposeError(IN std::string ErrorMessage, IN const char* Function, I
 	std::stringstream Buffer;
 
 	Buffer << ErrorMessage << "<br>";
-	Buffer << "File: " << File << " " << "Function: " << Function << "() " << "Line: " << Line; 
-	
+	Buffer << "File: " << File << " " << "Function: " << Function << "() " << "Line: " << Line;
+
 	return Buffer.str();
 }

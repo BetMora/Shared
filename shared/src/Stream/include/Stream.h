@@ -32,8 +32,8 @@ public:
 	char*			ReadString(IN bool NullTerminated = false);
 	char*			ReadString(IN size_t Size);
 
-	void			WriteRaw(IN void* Buffer, size_t Size);
-	char*			ReadRaw(IN size_t Size);
+ 	void			WriteRaw(IN void* Buffer, size_t Size);
+ 	char*			ReadRaw(IN size_t Size);
 
 	void			WriteToBuffer(OUT Buffer* Buf);
 	void			WriteFromBuffer(IN Buffer* Buf);
