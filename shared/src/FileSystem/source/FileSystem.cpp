@@ -108,7 +108,7 @@ char* FileSystem::HomeDirectory()
 
 #ifdef WINDOWS
 	strcpy(Buffer, getenv("USERPROFILE"));
-#elseif LINUX
+#else if LINUX
 	strcpy(Buffer, getenv("HOME"));
 #endif
 
@@ -122,7 +122,7 @@ char* FileSystem::WorkingDirectory()
 	static char Buffer[1024];
 #ifdef WINDOWS
 	getcwd(Buffer, 1024);
-#elseif LINUX
+#else if LINUX
 	strcpy(Buffer, getenv("PWD"));
 #endif
 
@@ -135,7 +135,7 @@ void FileSystem::CreateDirectory(IN const char* Path)
 {
 #ifdef WINDOWS
 	mkdir(Path);
-#elseif LINUX
+#else if LINUX
     mkdir(Path, 0755);
 #endif
 }

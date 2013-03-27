@@ -7,9 +7,11 @@ include_directories(src/Buffer/include
 					src/Compression/include
 					src/FileSystem/include
 					src/Log/include
+					src/Network/include
 					src/Stream/include
 					../external
-					../external/zlib-1.2.7)
+					../external/zlib-1.2.7
+					../external/curl-7.29.0/include)
 					
 set(INCLUDE_SHARED	src/Buffer/include/Buffer.h
 					src/Common/include/Config.h
@@ -25,6 +27,7 @@ set(INCLUDE_SHARED	src/Buffer/include/Buffer.h
 					src/FileSystem/include/File.h
 					src/FileSystem/include/FileSystem.h
 					src/Log/include/Log.h
+					src/Network/include/FileDownloader.h
 					src/Stream/include/Stream.h)
 
 set(SOURCE_SHARED	src/Buffer/source/Buffer.cpp
@@ -35,6 +38,7 @@ set(SOURCE_SHARED	src/Buffer/source/Buffer.cpp
 					src/FileSystem/source/File.cpp
 					src/FileSystem/source/FileSystem.cpp
 					src/Log/source/Log.cpp
+					src/Network/source/FileDownloader.cpp
 					src/Stream/source/Stream.cpp)
 
 add_library(Shared STATIC ${INCLUDE_SHARED} ${SOURCE_SHARED})

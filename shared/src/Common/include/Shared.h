@@ -9,6 +9,7 @@
 #include "Directory.h"
 #include "Endianness.h"
 #include "File.h"
+#include "FileDownloader.h"
 #include "FileSystem.h"
 #include "ICompressor.h"
 #include "Log.h"

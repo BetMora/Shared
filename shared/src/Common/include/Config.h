@@ -1,3 +1,3 @@
 #pragma once
 
-#define LINUX
+#define WINDOWS

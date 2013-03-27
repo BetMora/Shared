@@ -12,9 +12,12 @@ int MaxCompressedSize(int SrcLen)
 
 int main(int argc, char** argv)
 {
+	FileDownloader fd;
 	// declarations
 	std::string InputFileName,
 				OutputFileName;
+
+	fd.Download("http://www.gildor.org/down.php?file=35/umodel/umodel_win32.zip", SplitFileNameFromPath("http://www.gildor.org/down/35/umodel/umodel_win32.zip"));
 
 	File InputFile;
 	File OutputFile;
