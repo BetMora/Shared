@@ -12,6 +12,7 @@
 #include "FileDownloader.h"
 #include "FileSystem.h"
 #include "ICompressor.h"
+#include "ISerializable.h"
 #include "Log.h"
 #include "Stream.h"
 #include "StringUtils.h"

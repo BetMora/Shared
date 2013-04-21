@@ -4,12 +4,12 @@
 #include <cstring>
 #include <cstdarg>
 
-char* Strdup(const char* Str)
+char* Strdup(IN const char* Str)
 {
 	if(Str == 0)
 		return 0;
 
-	char* Dest = new char[strlen(Str) + 1];
+	char* Dest = new char[strlen(Str) + 1]; // adding 1 to the length of the string to put null-terminating character at the end
 
 	strcpy(Dest, Str);
 
@@ -18,14 +18,13 @@ char* Strdup(const char* Str)
 
 char* Strndup(const char* Str, size_t MaxCount)
 {
-	char* Dest;
-	size_t StrLen = strlen(Str);
+	if(!Str || MaxCount <= 0)
+		return 0;
 
-	if(StrLen < MaxCount)
+	if(strlen(Str) < MaxCount)
 		return Strdup(Str);
 
-	if(!Str || MaxCount < 0 || !(Dest = new char[MaxCount + 1]))
-		return 0;
+	char* Dest = new char[MaxCount + 1]; // adding 1 to the length of the string to put null-terminating character at the end
 
 	memcpy(Dest, Str, MaxCount);
 
@@ -34,7 +33,7 @@ char* Strndup(const char* Str, size_t MaxCount)
 	return Dest;
 }
 
-void ConvertSlash(char* String)
+void ConvertSlash(INOUT char* String)
 {
 	int Count = 0;
 
@@ -64,7 +63,7 @@ void ConvertSlash(char* String)
 	Ptr		= 0;
 }
 
-int TokenCount(const char* Path)
+int GetTokensCount(IN const char* Path)
 {
 	int Result = 0;
 
@@ -82,7 +81,7 @@ int TokenCount(const char* Path)
 		}
 
 		// if we write something like while(*Path != '\0'), 
-		// we would not be able to count last token as loop will break immediately upon reaching nul
+		// we would not be able to count last token as loop will break immediately upon reaching null
 		if(*Path == '\0')
 			break;
 
@@ -92,7 +91,7 @@ int TokenCount(const char* Path)
 	return Result;
 }
 
-char* PathToken(const char* Path, int Token)
+char* GetToken(IN const char* Path, IN int Token)
 {
 	size_t	Length			= strlen(Path);
 	int		Count			= 0;
@@ -143,52 +142,72 @@ char* PathToken(const char* Path, int Token)
 
 		delete Tokens;
 
+		Buffer[Length] = '\0';
+
 		return Buffer;
 	}
 	else
 		return 0;
 }
 
-char* SplitPathFromFileName(const char* FileName)
+char* GetPath(const char* FileName)
 {
-	int TokensCount = TokenCount(FileName);
+	int TokensCount = GetTokensCount(FileName);
 	std::string Temp;
 
 	// we don't add 1 to tokenscount as we don't want the filename to be append
 	for(size_t i = 1; i < TokensCount; i++)
 	{
-		Temp.append(PathToken(FileName, i));
+		Temp.append(GetToken(FileName, i));
 		Temp.append("\\");
 	}
 
 	return Strdup(Temp.c_str());
 }
 
-char* SplitFileNameFromPath(const char* Path)
+char* GetFileName(const char* Path)
 {
-	int TokensCount = TokenCount(Path);
+	int TokensCount = GetTokensCount(Path);
 
-	return PathToken(Path, TokensCount);
+	return GetToken(Path, TokensCount);
 }
 
-char* SplitExtension(const char* Path)
+char* GetExtension(const char* Path)
 {
-	int TokensCount = TokenCount(Path);
-
 	std::string Temp;
+	int TokensCount = GetTokensCount(Path);
 
-	Temp = PathToken(Path, TokensCount);
+	Temp = GetToken(Path, TokensCount); // get last token from path
 
 	int DotPos = 0;
 
-	if((DotPos = Temp.find(".")) == std::string::npos)
+	if((DotPos = Temp.find(".")) == std::string::npos) // if we have dot in our token - we got an extension
 		return Strdup(Temp.c_str());
 
+	// FIXME: for fuck sake why the hell is it here? i've already forgot (rofl)
 	int BufferSize = Temp.size() - DotPos;
 
 	char* Buffer = new char[BufferSize];
 	Temp.copy(Buffer, BufferSize, DotPos);
 	Buffer[BufferSize] = '\0';
+
+	return Buffer;
+}
+
+std::string MakePathRelative(IN const char* RootPath, IN const char* FileName)
+{
+	int RootTokCount = GetTokensCount(RootPath);
+	int TokCount = GetTokensCount(FileName);
+
+	std::string Buffer;
+
+	for(int n = RootTokCount; n < TokCount + 1; n++)
+	{
+		Buffer.append(GetToken(RootPath, n));
+		
+		if(n != TokCount)
+			Buffer.append("\\");
+	}
 
 	return Buffer;
 }

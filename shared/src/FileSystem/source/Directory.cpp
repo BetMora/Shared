@@ -99,7 +99,7 @@ void Directory::Open(IN const char* Name)
 	if(mData->RootPath.empty())
 		mData->RootPath = Name;
 
-	int RootTokCount = TokenCount(mData->RootPath.c_str());
+	int RootTokCount = GetTokensCount(mData->RootPath.c_str());
 
 	dirent* DirEntry;
 
@@ -114,13 +114,13 @@ void Directory::Open(IN const char* Name)
 	{
 		if((strcmp(DirEntry->d_name, ".") != 0)	 &&	 (strcmp(DirEntry->d_name, "..") != 0)) 
 		{
-			int TokCount = TokenCount(Name);
+			int TokCount = GetTokensCount(Name);
 
 			/* adding 1 to make sure we put last token aswell. 
 			 * little hack for loop, not for tokenization function itself */
 			for(int n = RootTokCount; n < TokCount + 1; n++)
 			{
-				Buffer.append(PathToken(Name, n));
+				Buffer.append(GetToken(Name, n));
 				Buffer.append("\\");
 			}
 
@@ -167,7 +167,7 @@ size_t Directory::DirectoriesNum()
 
 char* Directory::RootDirectory()
 {
-	return PathToken(mData->RootPath.c_str(), TokenCount(mData->RootPath.c_str()));
+	return GetToken(mData->RootPath.c_str(), GetTokensCount(mData->RootPath.c_str()));
 }
 
 std::vector<std::string> Directory::Files(IN bool Relative)

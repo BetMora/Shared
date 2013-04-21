@@ -5,15 +5,11 @@
 #include "Types.h"
 #include "Defines.h"
 
-class File;
-
 class FileDownloader
 {
 public:
 	FileDownloader();
 	~FileDownloader();
 
-	bool Download(const char* URL, const char* OutputFileName);
-private:
-	File* mOutputFile;
+	bool Download(IN const char* URL, IN const char* OutputFileName);
 };

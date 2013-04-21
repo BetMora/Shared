@@ -12,12 +12,10 @@
 
 FileDownloader::FileDownloader()
 {
-	mOutputFile = new File();
 }
 
 FileDownloader::~FileDownloader()
 {
-	delete mOutputFile;
 }
 
 size_t WriteData(void* Ptr, size_t Size, size_t Nmemb, FILE* FileStream)
@@ -27,14 +25,14 @@ size_t WriteData(void* Ptr, size_t Size, size_t Nmemb, FILE* FileStream)
 	return Written;
 }
 
-bool FileDownloader::Download(const char* URL, const char* OutputFileName)
+bool FileDownloader::Download(IN const char* URL, IN const char* OutputFileName)
 {
 	CURL* Curl;
 	CURLcode Res;
 
 	FILE* OutputFile;
 
-	FileSystem::CreateDirectoryTreeFromPath(SplitPathFromFileName(OutputFileName));
+	FileSystem::CreateDirectoryTreeFromPath(GetPath(OutputFileName));
 
 	Curl = curl_easy_init();
 

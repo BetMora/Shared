@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 
-project(zlibcd)
+project(template)
 
 include_directories(../../shared/src/Buffer/include
 					../../shared/src/Common/include
@@ -20,13 +20,13 @@ else(CMAKE_SIZEOF_VOID_P EQUAL 8)
 	link_directories(../../../external/curl-7.29.0/bin/windows/x32)
 endif(CMAKE_SIZEOF_VOID_P EQUAL 8)
 
-add_executable(zlibcd src/main.cpp)
+add_executable(template src/main.cpp)
 
 if(UNIX)
-target_link_libraries(zlibcd 	Shared
+target_link_libraries(template 	Shared
 								z)
 else(UNIX)
-target_link_libraries(zlibcd 	Shared
+target_link_libraries(template 	Shared
 								zlib
 								WS2_32
 								libcurl)

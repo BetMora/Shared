@@ -80,11 +80,13 @@ char* File::Name()
 
 size_t File::Size()
 {
+	size_t Stored = Tell();
+
 	Seek(0, END);
 
 	size_t Sz = Tell();
 
-	Seek(0, BEG);
+	Seek(Stored, BEG);
 
 	return Sz;
 }

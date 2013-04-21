@@ -2,6 +2,7 @@
 
 #include <zlib.h>
 #include <cstring>
+#include "puff.h"
 
 size_t ZLIBCompressor::Compress(OUT char* Dest, IN size_t DestLen, IN const char* Src, IN size_t SrcLen, int CompressionLevel)
 {
@@ -43,4 +44,5 @@ size_t ZLIBCompressor::Decompress(OUT char* Dest, IN size_t DestLen, IN const ch
 	inflateEnd(&ZStr);
 
 	return TotalOut;
+	
 }

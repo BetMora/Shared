@@ -5,21 +5,19 @@
 #include "Types.h"
 #include "Defines.h"
 
-#include <string>
-
 char* Strdup(IN const char* Str);
-char* Strdnup(IN const char* Str, IN size_t MaxCount);
+char* Strndup(IN const char* Str, IN size_t MaxCount);
 
-void ConvertSlash(IN char* String);
+// assumes that path has no mixed slashes
+void ConvertSlash(INOUT char* String);
 
-// returns number of tokens in the path
-int TokenCount(IN const char* Path);
+int GetTokensCount(IN const char* Path);
+char* GetToken(IN const char* Path, int Token);
 
-// returns token by its number
-char* PathToken(IN const char* Path, int Token);
+char* GetPath(IN const char* FileName);
+char* GetFileName(IN const char* Path);
+char* GetExtension(IN const char* Path);
 
-char* SplitPathFromFileName(IN const char* FileName);
-char* SplitFileNameFromPath(IN const char* Path);
-char* SplitExtension(IN const char* Path);
+std::string MakePathRelative(IN const char* RootPath, IN const char* FileName);
 
 std::string Format(IN const char* String, ...);

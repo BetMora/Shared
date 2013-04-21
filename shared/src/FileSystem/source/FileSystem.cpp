@@ -38,14 +38,14 @@ bool FileSystem::IsExists(IN const char* Path)
 
 void FileSystem::CreateDirectoryTreeFromPath(IN const char* Path)
 {
-	int TokensCount = TokenCount(Path);
+	int TokensCount = GetTokensCount(Path) + 1;
 	std::string Temp;
 
-	for(size_t i = 2; i < TokensCount + 1; i++)
+	for(size_t i = 2; i <= TokensCount; i++)
 	{
-		for(size_t n = 1; n < i + 1; n++)
+		for(size_t n = 1; n < i; n++)
 		{
-			Temp.append(PathToken(Path, n));
+			Temp.append(GetToken(Path, n));
 			Temp.append("\\");
 		}
 

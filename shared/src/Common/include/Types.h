@@ -1,6 +1,9 @@
 #pragma once
 
 #include <cstddef>
+#include <string>
+#include <vector>
+#include <map>
 
 typedef unsigned char		uint8;
 typedef unsigned short		uint16;

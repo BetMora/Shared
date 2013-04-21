@@ -3,21 +3,78 @@
 #include <cstdlib>
 #include <string>
 #include <iostream>
+#include <fstream>
+#include "puff.h"
 
-int MaxCompressedSize(int SrcLen)
-{
-	int n16kBlocks = (SrcLen + 16383) / 16384; // round up any fraction of a block
-	return (SrcLen + 6 + (n16kBlocks * 5));
-}
+// int MaxCompressedSize(int SrcLen)
+// {
+// 	int n16kBlocks = (SrcLen + 16383) / 16384; // round up any fraction of a block
+// 	return (SrcLen + 6 + (n16kBlocks * 5));
+// }
 
 int main(int argc, char** argv)
+{
+	std::ofstream headerInfo;
+	File bin(argv[1]);
+
+	std::string fileNameDump;
+	std::string fileNameHeader;
+	std::string fileNameHeaderInfo;
+
+	fileNameDump += GetPath(argv[1]);		// full path to the file	C:\Program files\APBAssetsDumper\Data
+	fileNameDump += "APBAssetsDumper\\";	// our output directyro		C:\Program files\APBAssetsDumper\Data\APBAssetsDumper
+	fileNameDump += GetFileName(argv[1]);	// our input file filename	C:\Program files\APBAssetsDumper\Data\APBAssetsDumper\InputFile.bin
+
+	FileSystem::CreateDirectoryTreeFromPath(fileNameDump.c_str()); // creates directory tree of path from above
+
+	fileNameDump += "\\";					/* add slash to the path	C:\Program files\APBAssetsDumper\Data\APBAssetsDumper\InputFile.bin\ */
+	fileNameDump += GetFileName(argv[1]);	/* add resulting file name	C:\Program files\APBAssetsDumper\Data\APBAssetsDumper\InputFile.bin\InputFile.bin */
+
+	fileNameHeader += fileNameDump;
+	fileNameHeader += ".header";			/* add .header extension	C:\Program files\APBAssetsDumper\Data\APBAssetsDumper\InputFile.bin\InputFile.bin.header */
+	
+	fileNameHeaderInfo += fileNameDump;
+	fileNameHeaderInfo += "_header";
+	fileNameHeaderInfo += ".txt";
+
+	fileNameDump += ".dump";				/* add .dump extension		C:\Program files\APBAssetsDumper\Data\APBAssetsDumper\InputFile.bin\InputFile.bin.dump */
+
+	bin.ReadUINT16();
+	bin.ReadUINT16();
+	int uncompressedSize =  bin.ReadUINT16();
+	
+	bin.Seek(0, Stream::BEG);
+
+	Buffer header(0x2e);
+	header.Write(bin.ReadRaw(0x2e), 0x2e);
+
+	bin.Seek(0x2e, Stream::BEG);
+
+	if(!bin.IsOpened())
+		return 1;
+
+	Buffer compressed(bin.Size());
+	Buffer uncompressed(uncompressedSize);
+	compressed.Write(bin.ReadRaw(bin.Size()), bin.Size());
+
+	unsigned long destLen = (unsigned long)uncompressed.Capacity();
+	unsigned long srcLen = (unsigned long)compressed.Size();
+
+	puff((unsigned char*)uncompressed.Data(), &destLen, (unsigned char*)compressed.Data(), &srcLen); // uncompress file data
+
+	File dump(fileNameDump.c_str());
+	dump.Write(header.Data(), 0x2e);
+	dump.Write(uncompressed.Data(), (size_t)destLen);
+}
+
+/*int main(int argc, char** argv)
 {
 	FileDownloader fd;
 	// declarations
 	std::string InputFileName,
 				OutputFileName;
 
-	fd.Download("http://www.gildor.org/down.php?file=35/umodel/umodel_win32.zip", SplitFileNameFromPath("http://www.gildor.org/down/35/umodel/umodel_win32.zip"));
+	//fd.Download("http://www.gildor.org/down.php?file=35/umodel/umodel_win32.zip", SplitFileNameFromPath("http://www.gildor.org/down/35/umodel/umodel_win32.zip"));
 
 	File InputFile;
 	File OutputFile;
@@ -143,4 +200,4 @@ int main(int argc, char** argv)
 	Log::Output(Format("Execution time: %f(ms)", Timer::GetTime()));
 
 	return 0;
-}
+}*/

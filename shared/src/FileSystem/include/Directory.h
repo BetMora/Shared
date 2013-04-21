@@ -5,9 +5,6 @@
 #include "Types.h"
 #include "Defines.h"
 
-#include <vector>
-#include <string>
-
 class Directory
 {
 public:
