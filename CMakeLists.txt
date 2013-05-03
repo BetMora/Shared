@@ -1,13 +1,13 @@
 cmake_minimum_required(VERSION 2.8)
 
-project(Shared)
+project(Reversing)
 
-SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS ON)
+Set_PROPERTY(GLOBAL PROPERTY USE_FOLDERS ON)
 
-add_subdirectory(shared)
-add_subdirectory(examples/zlibcd)
-add_subdirectory(examples/template)
+add_subdirectory(System)
+add_subdirectory(Examples/Flate)
+add_subdirectory(Examples/Template)
 
-SET_PROPERTY(TARGET Shared		PROPERTY FOLDER "Library")
-SET_PROPERTY(TARGET zlibcd		PROPERTY FOLDER "Examples")
-SET_PROPERTY(TARGET template	PROPERTY FOLDER "Examples")
+Set_PROPERTY(TARGET System		PROPERTY FOLDER "Libraries")
+Set_PROPERTY(TARGET Flate		PROPERTY FOLDER "Examples")
+Set_PROPERTY(TARGET Template	PROPERTY FOLDER "Examples")

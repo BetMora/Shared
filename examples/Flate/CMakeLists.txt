@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 
-project(Template)
+project(Flate)
 
 include_directories(../../System/Sources/Buffer
 					../../System/Sources/Common
@@ -22,13 +22,13 @@ else(CMAKE_SIZEOF_VOID_P EQUAL 8)
 	link_directories(../../../External/curl-7.29.0/bin/windows/x32)
 endif(CMAKE_SIZEOF_VOID_P EQUAL 8)
 
-add_executable(Template Source/main.cpp)
+add_executable(Flate Source/main.cpp)
 
 if(UNIX)
-target_link_libraries(Template 	System
+target_link_libraries(Flate 	System
 								z)
 else(UNIX)
-target_link_libraries(Template 	System
+target_link_libraries(Flate 	System
 								zlib
 								WS2_32
 								libcurl)
